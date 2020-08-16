@@ -1,9 +1,11 @@
 let http = require('http');
 let fs = require('fs');
-var appRoot = require('app-root-path');
+let appRoot = require('app-root-path');
 let distance = require('gps-distance');
 let gpxParser = require('gpxparser');
-var convert = require('convert-units');
+let convert = require('convert-units');
+let moment = require('moment');
+
 const sampleGPX = `${appRoot}/gpx/Recording1.gpx`;
 
 http.createServer(function (request, response) {
@@ -11,27 +13,41 @@ http.createServer(function (request, response) {
    // HTTP Status: 200 : OK
    // Content Type: text/plain
    response.writeHead(200, {'Content-Type': 'text/plain'});
+
    // Measure between two points:
    let result = distance(45.527517, -122.718766, 45.373373, -121.693604);
-
    // Measure a list of GPS points along a path:
     let path = [
       [45.527517, -122.718766],
       [45.373373, -121.693604],
       [45.527517, -122.718766]
     ];
-
     let result2 = distance(path);
 
     let gpx = new gpxParser(); //Create gpxParser Object
     gpx.parse(fs.readFileSync(sampleGPX, {encoding:'utf8', flag:'r'})); //parse gpx file from string data
     let totalDistanceMeters = gpx.tracks[0].distance.total; // IN METERS!!
 
-    // const data = fs.readFileSync(sampleGPX, {encoding:'utf8', flag:'r'});
-    console.log(totalDistanceMeters);
+    // convert to miles
     let totalDistanceMiles = convert(totalDistanceMeters).from('m').to('mi')
 
+    console.log(`metadata.name is ${JSON.stringify(gpx.metadata.name)}`);
+    // console.log(`tracks is ${JSON.stringify(gpx.tracks)}`);
+    console.log(`first point is ${JSON.stringify(gpx.tracks[0].points[0])}`);
+    console.log(`points.length is ${JSON.stringify(gpx.tracks[0].points.length)}`);
+    console.log(`last point is ${JSON.stringify(gpx.tracks[0].points[gpx.tracks[0].points.length - 1])}`);
+
+    let firstPointTime = gpx.tracks[0].points[0].time;
+    let lastPointTime = gpx.tracks[0].points[gpx.tracks[0].points.length - 1].time;
+    console.log(`first point time is ${JSON.stringify(gpx.tracks[0].points[0].time)}`);
+    console.log(`last point time is ${JSON.stringify(gpx.tracks[0].points[gpx.tracks[0].points.length - 1].time)}`);
+
     response.end(`distance in meters - ${totalDistanceMeters} and in miles - ${totalDistanceMiles}`);
+
+    // all trails call this total time as opposed to moving time which is typically smaller
+    let duration = moment.utc(moment(lastPointTime).diff(moment(firstPointTime))).format("HH:mm:ss")
+    console.log(`duration - ${duration}`);
+
     }).listen(8081);
 
 // Console will print the message
