@@ -3,6 +3,7 @@ let fs = require('fs');
 var appRoot = require('app-root-path');
 let distance = require('gps-distance');
 let gpxParser = require('gpxparser');
+var convert = require('convert-units');
 const sampleGPX = `${appRoot}/gpx/Recording1.gpx`;
 
 http.createServer(function (request, response) {
@@ -22,14 +23,15 @@ http.createServer(function (request, response) {
 
     let result2 = distance(path);
 
-    var gpx = new gpxParser(); //Create gpxParser Object
+    let gpx = new gpxParser(); //Create gpxParser Object
     gpx.parse(fs.readFileSync(sampleGPX, {encoding:'utf8', flag:'r'})); //parse gpx file from string data
-    var totalDistance = gpx.tracks[0].distance.total; // IN METERS!!
+    let totalDistanceMeters = gpx.tracks[0].distance.total; // IN METERS!!
 
-    const data = fs.readFileSync(sampleGPX, {encoding:'utf8', flag:'r'});
-    console.log(totalDistance);
+    // const data = fs.readFileSync(sampleGPX, {encoding:'utf8', flag:'r'});
+    console.log(totalDistanceMeters);
+    let totalDistanceMiles = convert(totalDistanceMeters).from('m').to('mi')
 
-    response.end(`hello - ${result} and ${result2} - ${totalDistance}`);
+    response.end(`distance in meters - ${totalDistanceMeters} and in miles - ${totalDistanceMiles}`);
     }).listen(8081);
 
 // Console will print the message
