@@ -42,11 +42,18 @@ http.createServer(function (request, response) {
     console.log(`first point time is ${JSON.stringify(gpx.tracks[0].points[0].time)}`);
     console.log(`last point time is ${JSON.stringify(gpx.tracks[0].points[gpx.tracks[0].points.length - 1].time)}`);
 
-    response.end(`distance in meters - ${totalDistanceMeters} and in miles - ${totalDistanceMiles}`);
-
     // all trails call this total time as opposed to moving time which is typically smaller
-    let duration = moment.utc(moment(lastPointTime).diff(moment(firstPointTime))).format("HH:mm:ss")
-    console.log(`duration - ${duration}`);
+    // let duration = moment.utc(moment(lastPointTime).diff(moment(firstPointTime))).format("HH:mm:ss")
+    var duration = moment.duration(moment(lastPointTime).diff(moment(firstPointTime)));
+    var durMinutes = duration.asMinutes();
+    console.log(`durMinutes - ${durMinutes}`);
+
+    // again, AllTrails would use moving time for this pace and not total time
+    let paceMinPerMiles = durMinutes / totalDistanceMiles;
+
+    response.end(`distance in meters - ${totalDistanceMeters} and in miles - ${totalDistanceMiles} duration - ${durMinutes} pace - ${paceMinPerMiles}`);
+
+
 
     }).listen(8081);
 
