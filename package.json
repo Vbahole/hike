@@ -13,7 +13,8 @@
   "dependencies": {
     "app-root-path": "3.0.0",
     "convert-units": "2.3.4",
-    "moment": "2.27.0"
+    "moment": "2.27.0",
+    "aws-sdk": "2.734.0"
   },
   "devDependencies": {
     "gps-distance": "0.0.4",

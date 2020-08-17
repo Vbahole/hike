@@ -5,6 +5,13 @@ let distance = require('gps-distance');
 let gpxParser = require('gpxparser');
 let convert = require('convert-units');
 let moment = require('moment');
+let AWS = require("aws-sdk");
+
+AWS.config.update({region: 'us-east-1'});
+// let db = new AWS.DynamoDB({apiVersion: '2012-08-10'});
+var docClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
+const dbTableName = "Hike";
+
 
 const sampleGPX = `${appRoot}/gpx/Recording1.gpx`;
 
@@ -37,19 +44,40 @@ http.createServer(function (request, response) {
     console.log(`points.length is ${JSON.stringify(gpx.tracks[0].points.length)}`);
     console.log(`last point is ${JSON.stringify(gpx.tracks[0].points[gpx.tracks[0].points.length - 1])}`);
 
-    let firstPointTime = gpx.tracks[0].points[0].time;
-    let lastPointTime = gpx.tracks[0].points[gpx.tracks[0].points.length - 1].time;
+    let firstPointTime = moment(gpx.tracks[0].points[0].time);
+    let lastPointTime = moment(gpx.tracks[0].points[gpx.tracks[0].points.length - 1].time);
     console.log(`first point time is ${JSON.stringify(gpx.tracks[0].points[0].time)}`);
     console.log(`last point time is ${JSON.stringify(gpx.tracks[0].points[gpx.tracks[0].points.length - 1].time)}`);
 
     // all trails call this total time as opposed to moving time which is typically smaller
     // let duration = moment.utc(moment(lastPointTime).diff(moment(firstPointTime))).format("HH:mm:ss")
-    var duration = moment.duration(moment(lastPointTime).diff(moment(firstPointTime)));
+    var duration = moment.duration(lastPointTime.diff(firstPointTime));
     var durMinutes = duration.asMinutes();
     console.log(`durMinutes - ${durMinutes}`);
 
     // again, AllTrails would use moving time for this pace and not total time
     let paceMinPerMiles = durMinutes / totalDistanceMiles;
+
+    // AWS stuff
+    var params = {
+      TableName: dbTableName,
+      Item: {
+        'RecordingDate' : firstPointTime.toString(),
+        'Recording' : {
+          'points': gpx.tracks[0].points,
+          'durationMinutes': durMinutes
+        }
+      }
+    };
+
+    // Call DynamoDB to add the item to the table
+    docClient.put(params, function(err, data) {
+      if (err) {
+        console.log("Error", err);
+      } else {
+        console.log("Success", data);
+      }
+    });
 
     response.end(`distance in meters - ${totalDistanceMeters} and in miles - ${totalDistanceMiles} duration - ${durMinutes} pace - ${paceMinPerMiles}`);
 
