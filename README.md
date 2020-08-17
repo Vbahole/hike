@@ -5,14 +5,17 @@ an app to compile gpx tracks and store them for stats.
 `nodemon main.js`
 
 
-using gpxparser - https://github.com/Luuka/GPXParser.js - to read in gpx and get distance
-could also use gps-distance - https://github.com/Maciek416/gps-distance - put couldn't get gpx read to work so would have to translate to coord array
+using gpxparser - https://github.com/Luuka/GPXParser.js
+to read in gpx and get distance and time for start end points
 
+
+crummy manual part
 Export gpx tracks out of alltrails to folder
-Write a node script (probably best to run this locally and have it connect to dynamo) to:
--parse all tracks in folder
--dedup the tracks (by id or start time)
--put to dynamo (id, track coordinates, time)
+
+node script (running locally) to:
+-parse all downloaded gpx files in a folder
+-dedup the tracks (by id or start time) - maybe not, just push them all each time to dynamo
+-put to dynamo (datetime, then an object with (track coordinates, time})
 Once in dynamo:
 -compile stats (maybe with a stream trigger to keep up to date)
 -website to show breakdowns

@@ -5,6 +5,7 @@ let appRoot = require('app-root-path');
 let gpxParser = require('gpxparser');
 let convert = require('convert-units');
 let moment = require('moment');
+const { uuid } = require('uuidv4');
 let AWS = require("aws-sdk");
 
 
@@ -39,10 +40,8 @@ files.forEach(function(file, index) {
   let totalDistanceMeters = gpx.tracks[0].distance.total; // IN METERS!!
 
   // convert to miles
-  let totalDistanceMiles = convert(totalDistanceMeters).from('m').to('mi')
+  let totalDistanceMiles = convert(totalDistanceMeters).from('m').to('mi');
 
-  console.log(`metadata.name is ${JSON.stringify(gpx.metadata.name)}`);
-  // console.log(`tracks is ${JSON.stringify(gpx.tracks)}`);
   console.log(`first point is ${JSON.stringify(gpx.tracks[0].points[0])}`);
   console.log(`points.length is ${JSON.stringify(gpx.tracks[0].points.length)}`);
   console.log(`last point is ${JSON.stringify(gpx.tracks[0].points[gpx.tracks[0].points.length - 1])}`);
@@ -65,6 +64,7 @@ files.forEach(function(file, index) {
   var params = {
     TableName: dbTableName,
     Item: {
+      'RecordingId': uuid(),
       'RecordingDate': firstPointTime.toString(),
       'Recording': {
         'points': gpx.tracks[0].points,
