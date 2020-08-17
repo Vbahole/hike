@@ -1,35 +1,22 @@
 let http = require('http');
 let fs = require('fs');
 let appRoot = require('app-root-path');
-let distance = require('gps-distance');
 let gpxParser = require('gpxparser');
 let convert = require('convert-units');
 let moment = require('moment');
 let AWS = require("aws-sdk");
 
 AWS.config.update({region: 'us-east-1'});
-// let db = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 var docClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 const dbTableName = "Hike";
 
-
-const sampleGPX = `${appRoot}/gpx/Recording1.gpx`;
+const sampleGPX = `${appRoot}/gpx/mock/Recording1.gpx`;
 
 http.createServer(function (request, response) {
    // Send the HTTP header
    // HTTP Status: 200 : OK
    // Content Type: text/plain
    response.writeHead(200, {'Content-Type': 'text/plain'});
-
-   // Measure between two points:
-   let result = distance(45.527517, -122.718766, 45.373373, -121.693604);
-   // Measure a list of GPS points along a path:
-    let path = [
-      [45.527517, -122.718766],
-      [45.373373, -121.693604],
-      [45.527517, -122.718766]
-    ];
-    let result2 = distance(path);
 
     let gpx = new gpxParser(); //Create gpxParser Object
     gpx.parse(fs.readFileSync(sampleGPX, {encoding:'utf8', flag:'r'})); //parse gpx file from string data
@@ -65,7 +52,8 @@ http.createServer(function (request, response) {
         'RecordingDate' : firstPointTime.toString(),
         'Recording' : {
           'points': gpx.tracks[0].points,
-          'durationMinutes': durMinutes
+          'durationMinutes': durMinutes,
+          'paceMinPerMile': paceMinPerMiles
         }
       }
     };

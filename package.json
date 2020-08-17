@@ -14,12 +14,10 @@
     "app-root-path": "3.0.0",
     "convert-units": "2.3.4",
     "moment": "2.27.0",
-    "aws-sdk": "2.734.0"
-  },
-  "devDependencies": {
-    "gps-distance": "0.0.4",
+    "aws-sdk": "2.734.0",
     "gpxparser": "^3.0.6"
   },
+  "devDependencies": {},
   "author": "",
   "license": "ISC",
   "bugs": {
