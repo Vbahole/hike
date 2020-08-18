@@ -9,28 +9,28 @@ var docClient = new AWS.DynamoDB.DocumentClient({
 });
 const dbTableName = 'hike';
 
-const stats = () => {
+async function stats() {
   console.log('*stats*  '.repeat(10));
   console.log(`starting stats`);
   let params;
 
   // read all recordings
   params = {
-    ExpressionAttributeValues: {
-      ':s': 'recording'
-     },
-   KeyConditionExpression: 'h = :s',
-   // FilterExpression: 'contains (Subtitle, :topic)',
-   TableName: dbTableName
-  };
+      ExpressionAttributeValues: {
+        ':s': 'recording'
+       },
+       KeyConditionExpression: 'h = :s',
+       TableName: dbTableName
+    };
+  var result = await docClient.query(params).promise()
+  console.log(`read ${JSON.stringify(result.Count)} recordings`);
 
-  docClient.query(params, function(err, data) {
-    if (err) {
-      console.log("Error", err);
-    } else {
-      console.log(`read ${JSON.stringify(data.Count)} recordings`);
-    }
-  });
+  // total distance
+  let arr = result.Items;
+
+  // array = [{"adults":2,"children":3},{"adults":2,"children":1}];
+  var totalDistance = arr.reduce((accum,item) => accum + item.track.totalDistanceMiles, 0);
+  console.log(`total distance is ${totalDistance}`);
 
   // put a stat
   params = {
@@ -39,7 +39,7 @@ const stats = () => {
       'h': 'stat',
       'r': 'stat',
       'stat': {
-        'totalMiles': 55,
+        'totalDistanceMiles': totalDistance,
       }
     }
   };

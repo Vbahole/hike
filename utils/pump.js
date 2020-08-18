@@ -64,7 +64,8 @@ const pump = () => {
         'track': {
           'points': gpx.tracks[0].points,
           'durationMinutes': durMinutes,
-          'paceMinPerMile': paceMinPerMiles
+          'paceMinPerMile': paceMinPerMiles,
+          'totalDistanceMiles': totalDistanceMiles
         }
       }
     };
