@@ -51,6 +51,22 @@ async function stats() {
       }
   }
   console.log(`${JSON.stringify(resultArr, null, 2)}`);
+  params = {
+    TableName: dbTableName,
+    Item: {
+      'h': 'stat',
+      'r': 'daily',
+      'stat': resultArr
+    }
+  };
+
+  docClient.put(params, function(err, data) {
+    if (err) {
+      console.log("Error", err);
+    } else {
+      // console.log("Success", data);
+    }
+  });
 
 
   // OVERALL STATS
