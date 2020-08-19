@@ -23,7 +23,6 @@ const pump = () => {
   });
   console.log('*pump*  '.repeat(10));
   console.log(`starting pump for ${files.length} gpx files`);
-  let index = 1;
   files.forEach(function(file, index) {
     let gpx = new gpxParser();
     let fullPath = path.join(gpxExportsDir, file);
@@ -53,7 +52,7 @@ const pump = () => {
     // again, AllTrails would use moving time for this pace and not total time
     let paceMinPerMiles = durMinutes / totalDistanceMiles;
 
-    console.log(`${index} of ${files.length}: ${firstPointTime} - ${file} - - ${durMinutes}`)
+    console.log(`${index + 1} of ${files.length}: ${firstPointTime} - ${file} - - ${durMinutes}`)
 
     // AWS stuff
     let params = {

@@ -1,4 +1,5 @@
-let AWS = require("aws-sdk");
+let AWS = require('aws-sdk');
+let moment = require('moment');
 
 // AWS
 AWS.config.update({
@@ -23,23 +24,49 @@ async function stats() {
        TableName: dbTableName
     };
   var result = await docClient.query(params).promise()
-  console.log(`read ${JSON.stringify(result.Count)} recordings`);
+  console.log(`reading ${JSON.stringify(result.Count)} recordings`);
 
-  // total distance
-  let arr = result.Items;
+  // DAILY STATS
+  let resultArr = [];
+  let dateArr = [];
+  let dailyClone = JSON.parse(JSON.stringify(result.Items));
+  for (let i of dailyClone) {
+    let rDate = moment(i.r).format('L');
+    console.log(`rDate is ${rDate}`);
+    let ind = dateArr.indexOf(rDate);
+    if (ind == -1) {
+        dateArr.push(rDate);
+        let obj = {
+          Date: rDate,
+          durationMinutes: i.track.durationMinutes,
+          totalDistanceMiles: i.track.totalDistanceMiles,
+          paceMinPerMile: i.track.paceMinPerMile
+        };
+        resultArr.push(obj);
+      }
+      else {
+        resultArr[ind].durationMinutes += i.track.durationMinutes;
+        resultArr[ind].totalDistanceMiles += i.track.totalDistanceMiles;
+        resultArr[ind].paceMinPerMile = (resultArr[ind].durationMinutes / resultArr[ind].totalDistanceMiles);
+      }
+  }
+  console.log(`${JSON.stringify(resultArr, null, 2)}`);
 
-  // array = [{"adults":2,"children":3},{"adults":2,"children":1}];
-  var totalDistance = arr.reduce((accum,item) => accum + item.track.totalDistanceMiles, 0);
-  console.log(`total distance is ${totalDistance}`);
 
-  // put a stat
+  // OVERALL STATS
+  let totalDistance = result.Items.reduce((accum,item) => accum + item.track.totalDistanceMiles, 0);
+  let totalDuration = result.Items.reduce((accum,item) => accum + item.track.durationMinutes, 0);
+  let overallPace = totalDuration / totalDistance;
+
   params = {
     TableName: dbTableName,
     Item: {
       'h': 'stat',
-      'r': 'stat',
+      'r': 'overall',
       'stat': {
         'totalDistanceMiles': totalDistance,
+        'totalDurationMinutes': totalDuration,
+        'overallPaceMinutesPerMile': overallPace
       }
     }
   };
