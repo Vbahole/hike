@@ -1,7 +1,8 @@
 let appRoot = require('app-root-path');
 let pump = require(`${appRoot}/utils/pump`);
 let stats = require(`${appRoot}/utils/stats`);
+let pull = require(`${appRoot}/utils/pull`);
 
-console.log(` hike application `);
 // pump.pump();
-stats.stats();
+// stats.stats();
+pull.pull();
