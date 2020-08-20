@@ -22,7 +22,7 @@ const pump = () => {
     return e.match(/.*\.(gpx)/ig);
   });
   console.log('*pump*  '.repeat(10));
-  console.log(`starting pump for ${files.length} gpx files`);
+  console.log(`pump starting for ${files.length} gpx files`);
   files.forEach(function(file, index) {
     let gpx = new gpxParser();
     let fullPath = path.join(gpxExportsDir, file);
@@ -52,26 +52,25 @@ const pump = () => {
     // again, AllTrails would use moving time for this pace and not total time
     let paceMinPerMiles = durMinutes / totalDistanceMiles;
 
-    console.log(`${index + 1} of ${files.length}: ${firstPointTime} - ${file} - - ${durMinutes}`)
-
+    console.log(`pump - ${index + 1} of ${files.length}: ${firstPointTime} - ${file} - - ${durMinutes}`)
+    // console.log(`gpx.tracks - ${JSON.stringify(gpx.tracks[0].points)}`)
     // AWS stuff
     let params = {
       TableName: dbTableName,
       Item: {
         'h': 'recording',
         'r': firstPointTime.toString(),
-        'track': {
-          'points': gpx.tracks[0].points,
-          'durationMinutes': durMinutes,
-          'paceMinPerMile': paceMinPerMiles,
-          'totalDistanceMiles': totalDistanceMiles
-        }
+        'durationMinutes': durMinutes,
+        'paceMinPerMile': paceMinPerMiles,
+        'totalDistanceMiles': totalDistanceMiles,
+        'points': gpx.tracks[0].points
       }
     };
 
     docClient.put(params, function(err, data) {
       if (err) {
-        console.log("Error", err);
+        // console.log("DEBUG", (new Error().stack.split("at ")[1]).trim());
+        console.log(`pump error - ${JSON.stringify(err)}`)
       } else {
         // console.log("Success", data);
       }
