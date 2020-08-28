@@ -8,13 +8,11 @@ AWS.config.update({
 var docClient = new AWS.DynamoDB.DocumentClient({
   apiVersion: '2012-08-10'
 });
-const dbTableName = 'hike';
 
-async function stats() {
-  console.log('*stats*  '.repeat(10));
+const computeStats = async (dbTableName) => {
   let params;
 
-  // read all recordings
+  // read all recordings from dynamodb each time - costly
   params = {
       ExpressionAttributeValues: {
         ':s': 'recording'
@@ -52,4 +50,4 @@ async function stats() {
   });
 };
 
-exports.stats = stats;
+exports.computeStats = computeStats;

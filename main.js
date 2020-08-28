@@ -1,6 +1,6 @@
 let appRoot = require('app-root-path');
 let { importGpx } = require(`${appRoot}/utils/import`);
-let stats = require(`${appRoot}/utils/stats`);
+let { computeStats } = require(`${appRoot}/utils/stats`);
 let pull = require(`${appRoot}/utils/pull`);
 let { putToDynamo } = require(`${appRoot}/utils/put`);
 
@@ -12,8 +12,8 @@ let gpxRecords = importGpx(gpxSourceDir);
 console.log(`${gpxRecords.length} recs imported`);
 
 // push them to dynamodb
-let putResult = putToDynamo(dbTableName, gpxRecords);
+putToDynamo(dbTableName, gpxRecords);
 
-// pump.pump();
-// stats.stats();
+computeStats(dbTableName);
+
 // pull.pull();
