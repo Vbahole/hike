@@ -1,5 +1,5 @@
 let appRoot = require('app-root-path');
-let pump = require(`${appRoot}/utils/pump`);
+let import = require(`${appRoot}/utils/import`);
 let stats = require(`${appRoot}/utils/stats`);
 let pull = require(`${appRoot}/utils/pull`);
 
