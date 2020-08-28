@@ -1,6 +1,6 @@
+// pump - read gpx from directory, parse, calc a few things, return records
 let fs = require('fs');
 let path = require('path');
-let appRoot = require('app-root-path');
 let gpxParser = require('gpxparser');
 let convert = require('convert-units');
 let moment = require('moment');
@@ -13,23 +13,24 @@ AWS.config.update({
 var docClient = new AWS.DynamoDB.DocumentClient({
   apiVersion: '2012-08-10'
 });
-const dbTableName = 'hike';
-const gpxExportsDir = `${appRoot}/gpx/exports`;
 
-const pump = () => {
-  let dirCont = fs.readdirSync(gpxExportsDir);
-  let files = dirCont.filter(function(e) {
+// (destination dynamo table name, source directory for gpx files)
+const importGpx = (dbTableName, gpxSourceDir) => {
+  // read all gpx files from source directory
+  let files = fs.readdirSync(gpxSourceDir).filter(function(e) {
     return e.match(/.*\.(gpx)/ig);
   });
   console.log('*pump*  '.repeat(10));
-  console.log(`pump starting for ${files.length} gpx files`);
+  console.log(`pumping ${files.length} gpx files into ${dbTableName} db from ${gpxSourceDir}`);
+
+  // parse for total distance, delta for time, calc for pace
+  let gpx = new gpxParser();
   files.forEach(function(file, index) {
-    let gpx = new gpxParser();
-    let fullPath = path.join(gpxExportsDir, file);
-    gpx.parse(fs.readFileSync(fullPath, {
+    gpx.parse(fs.readFileSync(path.join(gpxSourceDir, file), {
       encoding: 'utf8',
       flag: 'r'
     })); //parse gpx file from string data
+
     let totalDistanceMeters = gpx.tracks[0].distance.total; // IN METERS!!
 
     // convert to miles
@@ -49,7 +50,7 @@ const pump = () => {
     let duration = moment.duration(lastPointTime.diff(firstPointTime));
     let durMinutes = duration.asMinutes();
 
-    // again, AllTrails would use moving time for this pace and not total time
+    // AllTrails would use moving time for this pace and not total time
     let paceMinPerMiles = durMinutes / totalDistanceMiles;
 
     console.log(`pump - ${index + 1} of ${files.length}: ${firstPointTime} - ${file} - - ${durMinutes}`)
@@ -78,4 +79,4 @@ const pump = () => {
   });
 };
 
-exports.pump = pump;
+exports.importGpx = importGpx;
