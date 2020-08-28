@@ -12,7 +12,6 @@ const dbTableName = 'hike';
 
 async function stats() {
   console.log('*stats*  '.repeat(10));
-  console.log(`starting stats`);
   let params;
 
   // read all recordings
@@ -24,54 +23,11 @@ async function stats() {
        TableName: dbTableName
     };
   var result = await docClient.query(params).promise()
-  console.log(`reading ${JSON.stringify(result.Count)} recordings`);
-
-  // DAILY STATS
-  let resultArr = [];
-  let dateArr = [];
-  let dailyClone = JSON.parse(JSON.stringify(result.Items));
-  for (let i of dailyClone) {
-    let rDate = moment(i.r).format('L');
-    console.log(`rDate is ${rDate}`);
-    let ind = dateArr.indexOf(rDate);
-    if (ind == -1) {
-        dateArr.push(rDate);
-        let obj = {
-          Date: rDate,
-          durationMinutes: i.track.durationMinutes,
-          totalDistanceMiles: i.track.totalDistanceMiles,
-          paceMinPerMile: i.track.paceMinPerMile
-        };
-        resultArr.push(obj);
-      }
-      else {
-        resultArr[ind].durationMinutes += i.track.durationMinutes;
-        resultArr[ind].totalDistanceMiles += i.track.totalDistanceMiles;
-        resultArr[ind].paceMinPerMile = (resultArr[ind].durationMinutes / resultArr[ind].totalDistanceMiles);
-      }
-  }
-  console.log(`${JSON.stringify(resultArr, null, 2)}`);
-  params = {
-    TableName: dbTableName,
-    Item: {
-      'h': 'stat',
-      'r': 'daily',
-      'stat': resultArr
-    }
-  };
-
-  docClient.put(params, function(err, data) {
-    if (err) {
-      console.log("Error", err);
-    } else {
-      // console.log("Success", data);
-    }
-  });
-
+  console.log(`stats reading ${JSON.stringify(result.Count)} recordings`);
 
   // OVERALL STATS
-  let totalDistance = result.Items.reduce((accum,item) => accum + item.track.totalDistanceMiles, 0);
-  let totalDuration = result.Items.reduce((accum,item) => accum + item.track.durationMinutes, 0);
+  let totalDistance = result.Items.reduce((accum,item) => accum + item.totalDistanceMiles, 0);
+  let totalDuration = result.Items.reduce((accum,item) => accum + item.durationMinutes, 0);
   let overallPace = totalDuration / totalDistance;
 
   params = {
@@ -89,7 +45,7 @@ async function stats() {
 
   docClient.put(params, function(err, data) {
     if (err) {
-      console.log("Error", err);
+      console.log("stats Error in put", err);
     } else {
       // console.log("Success", data);
     }

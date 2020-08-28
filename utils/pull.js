@@ -30,9 +30,10 @@ async function pull() {
     if (err) {
       console.log("Error", err);
     } else {
-      // let result = data.Items.map(({track, ...rest}) => rest); // remove track
-      let result = data.Items.map(({track, ...rest}) => rest);
-      
+      let result = data.Items.map(({points, ...rest}) => rest); // remove track
+      // const { a, ...rest } = data;
+      // let result = data.Items.map(({track, ...rest}) => rest);
+      // let result = data;
       console.log(`${JSON.stringify(result, null, 2)}`);
     }
   });
