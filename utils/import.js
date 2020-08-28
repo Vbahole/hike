@@ -37,6 +37,7 @@ const parse = (filePath) => {
 
   // AllTrails would use moving time for this pace and not total time
   r.paceMinPerMiles = r.durMinutes / r.totalDistanceMiles;
+  r.points = parser.tracks[0].points;
   return r;
 };
 

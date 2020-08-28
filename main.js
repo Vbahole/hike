@@ -9,9 +9,11 @@ const dbTableName = 'hike';
 
 // convert a folder of gpx files into an array of records with some extra spice
 let gpxRecords = importGpx(gpxSourceDir);
-console.log(`recs ${JSON.stringify(gpxRecords, null, 2)}`);
+console.log(`${gpxRecords.length} recs imported`);
+
 // push them to dynamodb
-//let putResult = putToDynamo(dbTableName, records);
+let putResult = putToDynamo(dbTableName, gpxRecords);
+console.log(`put result - ${JSON.stringify(putResult, null, 2)}`);
 
 // pump.pump();
 // stats.stats();

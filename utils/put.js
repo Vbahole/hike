@@ -20,7 +20,7 @@ const putToDynamo = (dbTableName, records) => {
           'durationMinutes': r.durMinutes,
           'paceMinPerMile': r.paceMinPerMiles,
           'totalDistanceMiles': r.totalDistanceMiles,
-          'points': parser.tracks[0].points
+          'points': r.points
         }
       };
 
@@ -29,6 +29,7 @@ const putToDynamo = (dbTableName, records) => {
           console.log(`PUT error - ${JSON.stringify(err)}`)
           return null;
         } else {
+          console.log(`PUT worked - ${JSON.stringify(data, null, 2)}`)
           return data;
         }
       });
