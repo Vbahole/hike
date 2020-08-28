@@ -6,6 +6,8 @@ let convert = require('convert-units');
 let moment = require('moment');
 let AWS = require("aws-sdk");
 
+let parser;
+
 // AWS
 AWS.config.update({
   region: 'us-east-1'
@@ -16,34 +18,35 @@ var docClient = new AWS.DynamoDB.DocumentClient({
 
 // (destination dynamo table name, source directory for gpx files)
 const importGpx = (dbTableName, gpxSourceDir) => {
+
   // read all gpx files from source directory
-  let files = fs.readdirSync(gpxSourceDir).filter(function(e) {
-    return e.match(/.*\.(gpx)/ig);
-  });
-  console.log('*pump*  '.repeat(10));
-  console.log(`pumping ${files.length} gpx files into ${dbTableName} db from ${gpxSourceDir}`);
+  const files = fs.readdirSync(gpxSourceDir).filter(filename => filename.match(/.*\.(gpx)/ig));
+  console.log(`IMPORTING ${files.length} gpx files into ${dbTableName} db from ${gpxSourceDir}`);
 
   // parse for total distance, delta for time, calc for pace
-  let gpx = new gpxParser();
-  files.forEach(function(file, index) {
-    gpx.parse(fs.readFileSync(path.join(gpxSourceDir, file), {
+  // let doubled = arr.map(num => {
+  //  return num * 2;
+//});
+return files.map((file, index) => {
+    parser = new gpxParser();
+    parser.parse(fs.readFileSync(path.join(gpxSourceDir, file), {
       encoding: 'utf8',
       flag: 'r'
     })); //parse gpx file from string data
 
-    let totalDistanceMeters = gpx.tracks[0].distance.total; // IN METERS!!
+    let totalDistanceMeters = parser.tracks[0].distance.total; // IN METERS!!
 
     // convert to miles
     let totalDistanceMiles = convert(totalDistanceMeters).from('m').to('mi');
 
-    // console.log(`first point is ${JSON.stringify(gpx.tracks[0].points[0])}`);
-    // console.log(`points.length is ${JSON.stringify(gpx.tracks[0].points.length)}`);
-    // console.log(`last point is ${JSON.stringify(gpx.tracks[0].points[gpx.tracks[0].points.length - 1])}`);
+    // console.log(`first point is ${JSON.stringify(parser.tracks[0].points[0])}`);
+    // console.log(`points.length is ${JSON.stringify(parser.tracks[0].points.length)}`);
+    // console.log(`last point is ${JSON.stringify(parser.tracks[0].points[parser.tracks[0].points.length - 1])}`);
 
-    let firstPointTime = moment(gpx.tracks[0].points[0].time);
-    let lastPointTime = moment(gpx.tracks[0].points[gpx.tracks[0].points.length - 1].time);
-    // console.log(`first point time is ${JSON.stringify(gpx.tracks[0].points[0].time)}`);
-    // console.log(`last point time is ${JSON.stringify(gpx.tracks[0].points[gpx.tracks[0].points.length - 1].time)}`);
+    let firstPointTime = moment(parser.tracks[0].points[0].time);
+    let lastPointTime = moment(parser.tracks[0].points[parser.tracks[0].points.length - 1].time);
+    // console.log(`first point time is ${JSON.stringify(parser.tracks[0].points[0].time)}`);
+    // console.log(`last point time is ${JSON.stringify(parser.tracks[0].points[parser.tracks[0].points.length - 1].time)}`);
 
     // all trails call this total time as opposed to moving time which is typically smaller
     // let duration = moment.utc(moment(lastPointTime).diff(moment(firstPointTime))).format("HH:mm:ss")
@@ -53,8 +56,9 @@ const importGpx = (dbTableName, gpxSourceDir) => {
     // AllTrails would use moving time for this pace and not total time
     let paceMinPerMiles = durMinutes / totalDistanceMiles;
 
-    console.log(`pump - ${index + 1} of ${files.length}: ${firstPointTime} - ${file} - - ${durMinutes}`)
-    // console.log(`gpx.tracks - ${JSON.stringify(gpx.tracks[0].points)}`)
+    console.log(`import- ${index + 1}/${files.length}: ${firstPointTime} - ${file} - - ${durMinutes}`)
+
+/*
     // AWS stuff
     let params = {
       TableName: dbTableName,
@@ -64,7 +68,7 @@ const importGpx = (dbTableName, gpxSourceDir) => {
         'durationMinutes': durMinutes,
         'paceMinPerMile': paceMinPerMiles,
         'totalDistanceMiles': totalDistanceMiles,
-        'points': gpx.tracks[0].points
+        'points': parser.tracks[0].points
       }
     };
 
@@ -76,6 +80,7 @@ const importGpx = (dbTableName, gpxSourceDir) => {
         // console.log("Success", data);
       }
     });
+    */
   });
 };
 
