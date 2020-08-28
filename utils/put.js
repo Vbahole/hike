@@ -27,10 +27,8 @@ const putToDynamo = (dbTableName, records) => {
       docClient.put(params, function(err, data) {
         if (err) {
           console.log(`PUT error - ${JSON.stringify(err)}`)
-          return null;
         } else {
-          console.log(`PUT worked - ${JSON.stringify(data, null, 2)}`)
-          return data;
+          // console.log(`PUT worked`)
         }
       });
     });

@@ -13,7 +13,6 @@ console.log(`${gpxRecords.length} recs imported`);
 
 // push them to dynamodb
 let putResult = putToDynamo(dbTableName, gpxRecords);
-console.log(`put result - ${JSON.stringify(putResult, null, 2)}`);
 
 // pump.pump();
 // stats.stats();
