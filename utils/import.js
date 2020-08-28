@@ -12,7 +12,7 @@ const importGpx = (gpxSourceDir) => {
 
   // read all gpx files from source directory
   const files = fs.readdirSync(gpxSourceDir).filter(filename => filename.match(/.*\.(gpx)/ig));
-  console.log(`IMPORTING ${files.length} gpx files into ${dbTableName} db from ${gpxSourceDir}`);
+  console.log(`IMPORTING ${files.length} gpx files from ${gpxSourceDir}`);
 
   return files.map((file, index) => {
       parser = new gpxParser();
