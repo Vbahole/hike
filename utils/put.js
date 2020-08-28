@@ -11,27 +11,28 @@ var docClient = new AWS.DynamoDB.DocumentClient({
 
 // (destination dynamo table name, parsed gpx files)
 const putToDynamo = (dbTableName, records) => {
-    let params = {
-      TableName: dbTableName,
-      Item: {
-        'h': 'recording',
-        'r': firstPointTime.toString(),
-        'durationMinutes': durMinutes,
-        'paceMinPerMile': paceMinPerMiles,
-        'totalDistanceMiles': totalDistanceMiles,
-        'points': parser.tracks[0].points
-      }
-    };
+  return records.map((r) => {
+      let params = {
+        TableName: dbTableName,
+        Item: {
+          'h': 'recording',
+          'r': r.firstPointTime.toString(),
+          'durationMinutes': r.durMinutes,
+          'paceMinPerMile': r.paceMinPerMiles,
+          'totalDistanceMiles': r.totalDistanceMiles,
+          'points': parser.tracks[0].points
+        }
+      };
 
-    docClient.put(params, function(err, data) {
-      if (err) {
-        // console.log("DEBUG", (new Error().stack.split("at ")[1]).trim());
-        console.log(`pump error - ${JSON.stringify(err)}`)
-      } else {
-        // console.log("Success", data);
-      }
+      docClient.put(params, function(err, data) {
+        if (err) {
+          console.log(`PUT error - ${JSON.stringify(err)}`)
+          return null;
+        } else {
+          return data;
+        }
+      });
     });
-  });
-};
+  };
 
 exports.putToDynamo = putToDynamo;
