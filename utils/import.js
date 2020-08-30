@@ -7,7 +7,7 @@ let moment = require('moment');
 
 let parser;
 
-const parse = (filePath) => {
+const parse = (filePath, importPoints) => {
   parser = new gpxParser();
   parser.parse(fs.readFileSync(filePath), {
     encoding: 'utf8',
@@ -33,23 +33,28 @@ const parse = (filePath) => {
   // all trails call this total time as opposed to moving time which is typically smaller
   // let duration = moment.utc(moment(lastPointTime).diff(moment(firstPointTime))).format("HH:mm:ss")
   let duration = moment.duration(r.lastPointTime.diff(r.firstPointTime));
-  r.durMinutes = duration.asMinutes();
+  r.durationMinutes = duration.asMinutes();
 
   // AllTrails would use moving time for this pace and not total time
-  r.paceMinPerMiles = r.durMinutes / r.totalDistanceMiles;
-  r.points = parser.tracks[0].points;
+  r.paceMinPerMiles = r.durationMinutes / r.totalDistanceMiles;
+  if (importPoints){
+    console.log('importing points');
+    r.points = parser.tracks[0].points;
+  } else {
+    r.points = [];
+  }
   return r;
 };
 
-// (source directory for gpx files)
-const importGpx = (gpxSourceDir) => {
+// (source directory for gpx files, limit to n recs to speed up dev, if true dont import points)
+const importGpx = (gpxSourceDir, limit, importPoints) => {
   // read all gpx files from source directory
   const files = fs.readdirSync(gpxSourceDir).filter(filename => filename.match(/.*\.(gpx)/ig));
   console.log(`IMPORTING ${files.length} gpx files from ${gpxSourceDir}`);
-
-  return files.map((file, index) => {
+// list.slice(0, size)
+  return files.slice(0, limit).map((file, index) => {
     console.log(`import- ${index + 1}/${files.length}`)
-    return parse(path.join(gpxSourceDir, file));
+    return parse(path.join(gpxSourceDir, file), importPoints);
   });
 };
 

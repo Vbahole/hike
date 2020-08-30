@@ -11,22 +11,24 @@ var docClient = new AWS.DynamoDB.DocumentClient({
 
 // (destination dynamo table name, parsed gpx files)
 const putToDynamo = (dbTableName, records) => {
+  console.log(`putting ${records.length} records to dynamo table ${dbTableName} \n`);
+
   return records.map((r) => {
       let params = {
         TableName: dbTableName,
         Item: {
           'h': 'recording',
           'r': r.firstPointTime.toString(),
-          'durationMinutes': r.durMinutes,
+          'durationMinutes': r.durationMinutes,
           'paceMinPerMile': r.paceMinPerMiles,
           'totalDistanceMiles': r.totalDistanceMiles,
           'points': r.points
         }
       };
-
+      // console.log(`put params ${JSON.stringify(params, null, 2)}`);
       docClient.put(params, function(err, data) {
         if (err) {
-          console.log(`PUT error - ${JSON.stringify(err)}`)
+          console.log(`PUT error - ${JSON.stringify(err)} \n`)
         } else {
           // console.log(`PUT worked`)
         }

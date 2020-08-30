@@ -9,7 +9,8 @@ var docClient = new AWS.DynamoDB.DocumentClient({
   apiVersion: '2012-08-10'
 });
 
-const computeStats = async (dbTableName) => {
+// (dynamo table name, optionally a gpxRecord set, or will pull from aws)
+const computeStats = async (dbTableName, gpxRecords) => {
   let params;
 
   // read all recordings from dynamodb each time - costly
@@ -20,12 +21,15 @@ const computeStats = async (dbTableName) => {
        KeyConditionExpression: 'h = :s',
        TableName: dbTableName
     };
-  var result = await docClient.query(params).promise()
-  console.log(`stats reading ${JSON.stringify(result.Count)} recordings`);
+  if (!gpxRecords){
+    gpxRecords = await docClient.query(params).promise();
+    gpxRecords = gpxRecords.Items;
+  }
+  console.log(`stats computing for ${JSON.stringify(gpxRecords)} recordings \n`);
 
   // OVERALL STATS
-  let totalDistance = result.Items.reduce((accum,item) => accum + item.totalDistanceMiles, 0);
-  let totalDuration = result.Items.reduce((accum,item) => accum + item.durationMinutes, 0);
+  let totalDistance = gpxRecords.reduce((accum,item) => accum + item.totalDistanceMiles, 0);
+  let totalDuration = gpxRecords.reduce((accum,item) => accum + item.durationMinutes, 0);
   let overallPace = totalDuration / totalDistance;
 
   params = {
@@ -41,9 +45,11 @@ const computeStats = async (dbTableName) => {
     }
   };
 
+  console.log(`stats put params ${JSON.stringify(params)}`);
+
   docClient.put(params, function(err, data) {
     if (err) {
-      console.log("stats Error in put", err);
+      console.log(`stats Error in put ${JSON.stringify(err)}`);
     } else {
       // console.log("Success", data);
     }
