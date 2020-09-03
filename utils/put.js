@@ -14,6 +14,7 @@ const putToDynamo = (dbTableName, records) => {
   console.log(`putting ${records.length} records to dynamo table ${dbTableName} \n`);
 
   return records.map((r) => {
+    /*
       let params = {
         TableName: dbTableName,
         Item: {
@@ -25,12 +26,17 @@ const putToDynamo = (dbTableName, records) => {
           'points': r.points
         }
       };
-      // console.log(`put params ${JSON.stringify(params, null, 2)}`);
+      */
+      // don't define the item while putting it in, just slap it in
+      let params = {
+        TableName: dbTableName,
+        Item: r
+      };
+
       docClient.put(params, function(err, data) {
         if (err) {
           console.log(`PUT error - ${JSON.stringify(err)} \n`)
         } else {
-          // console.log(`PUT worked`)
         }
       });
     });

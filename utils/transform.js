@@ -10,66 +10,50 @@ AWS.config.update({
 var docClient = new AWS.DynamoDB.DocumentClient({
   apiVersion: '2012-08-10'
 });
-const dbTableName = 'hike';
 
-async function consolidate() {
-  console.log('*consolidate*  '.repeat(7));
-  let params;
+const consolidate = async (dbTableName, gpxRecords) => {
+  console.log(`consolidating`);
 
   // read all recordings
-  params = {
+  let params = {
       ExpressionAttributeValues: {
         ':s': 'recording'
        },
        KeyConditionExpression: 'h = :s',
        TableName: dbTableName
     };
-  var result = await docClient.query(params).promise()
-  console.log(`consolidating ${JSON.stringify(result.Count)} recordings`);
-  // console.log(`Items ${JSON.stringify(kill(result), null, 2)}`);
+  if (!gpxRecords){
+    gpxRecords = await docClient.query(params).promise();
+    gpxRecords = gpxRecords.Items;
+  }
+  console.log(`consolidating ${gpxRecords.length} recordings`);
 
   // DAILY CONSOLIDATE
   let resultArr = [];
   let dateArr = [];
-  let dailyClone = JSON.parse(JSON.stringify(result.Items));
+  let dailyClone = JSON.parse(JSON.stringify(gpxRecords));
+
   for (let i of dailyClone) {
-    // console.log(`transform - i is ${JSON.stringify(kill(i), null, 2)}`);\
-    console.log(`consolidate - i is ${JSON.stringify(i.r)}`);
-    let rDate = moment(i.r).format('L');
+    console.log(`consolidating this item - ${JSON.stringify(i, null, 2)}`);
+    let rDate = i.date;
     console.log(`consolidate rDate is ${rDate}`);
     let ind = dateArr.indexOf(rDate);
     if (ind == -1) {
         dateArr.push(rDate);
-        let obj = {
-          Date: rDate,
-          durationMinutes: i.durationMinutes,
-          totalDistanceMiles: i.totalDistanceMiles,
-          paceMinPerMile: i.paceMinPerMile
-        };
-        resultArr.push(obj);
+        resultArr.push(i);
       }
       else {
         resultArr[ind].durationMinutes += i.durationMinutes;
         resultArr[ind].totalDistanceMiles += i.totalDistanceMiles;
         resultArr[ind].paceMinPerMile = (resultArr[ind].durationMinutes / resultArr[ind].totalDistanceMiles);
+        resultArr[ind].multiHike = 'true';
       }
   }
-  params = {
-    TableName: dbTableName,
-    Item: {
-      'h': 'daily',
-      'r': 'asOfDate',
-      'stat': resultArr
-    }
-  };
 
-  docClient.put(params, function(err, data) {
-    if (err) {
-      console.log(`consolidate error ${JSON.stringify(err)}`);
-    } else {
-      // console.log("Success", data);
-    }
-  });
+  console.log(`resultArr - ${JSON.stringify(resultArr, null, 2)}`);
+  console.log(`dateArr - ${JSON.stringify(dateArr, null, 2)}`);
+
+  return resultArr;
 };
 
 exports.consolidate = consolidate;

@@ -11,10 +11,8 @@ var docClient = new AWS.DynamoDB.DocumentClient({
 
 // (dynamo table name, optionally a gpxRecord set, or will pull from aws)
 const computeStats = async (dbTableName, gpxRecords) => {
-  let params;
-
   // read all recordings from dynamodb each time - costly
-  params = {
+  let params = {
       ExpressionAttributeValues: {
         ':s': 'recording'
        },
@@ -25,7 +23,7 @@ const computeStats = async (dbTableName, gpxRecords) => {
     gpxRecords = await docClient.query(params).promise();
     gpxRecords = gpxRecords.Items;
   }
-  console.log(`stats computing for ${JSON.stringify(gpxRecords)} recordings \n`);
+  console.log(`stats computing for ${gpxRecords.length} recordings \n`);
 
   // OVERALL STATS
   let totalDistance = gpxRecords.reduce((accum,item) => accum + item.totalDistanceMiles, 0);
@@ -45,7 +43,7 @@ const computeStats = async (dbTableName, gpxRecords) => {
     }
   };
 
-  console.log(`stats put params ${JSON.stringify(params)}`);
+  console.log(`stats overall put params ${JSON.stringify(params)}`);
 
   docClient.put(params, function(err, data) {
     if (err) {

@@ -37,22 +37,21 @@ const parse = (filePath, importPoints) => {
   r.durationMinutes = duration.asMinutes();
 
   // AllTrails would use moving time for this pace and not total time
-  r.paceMinPerMiles = r.durationMinutes / r.totalDistanceMiles;
+  r.paceMinPerMile = r.durationMinutes / r.totalDistanceMiles;
   if (importPoints){
-    console.log('importing points');
-    r.points = parser.tracks[0].points;
+    // points is an array to handle multi-hike days
+    r.points = [ parser.tracks[0].points ];
   } else {
     r.points = [];
   }
   return r;
 };
 
-// (source directory for gpx files, limit to n recs to speed up dev, if true dont import points)
-const importGpx = (gpxSourceDir, limit, importPoints) => {
+// (source directory for gpx files, if true import points, limit to n recs to speed up dev)
+const importGpx = (gpxSourceDir, importPoints = true, limit) => {
   // read all gpx files from source directory
   const files = fs.readdirSync(gpxSourceDir).filter(filename => filename.match(/.*\.(gpx)/ig));
-  console.log(`IMPORTING ${files.length} gpx files from ${gpxSourceDir}`);
-// list.slice(0, size)
+  console.log(`IMPORTING ${files.length} gpx files from ${gpxSourceDir} points = ${importPoints}`);
   return files.slice(0, limit).map((file, index) => {
     console.log(`import- ${index + 1}/${files.length}`)
     return parse(path.join(gpxSourceDir, file), importPoints);
