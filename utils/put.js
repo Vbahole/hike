@@ -18,7 +18,7 @@ const putToDynamo = (dbTableName, records) => {
         TableName: dbTableName,
         Item: {
           'h': 'recording',
-          'r': r.firstPointTime.toString(),
+          'r': r.date,
           'durationMinutes': r.durationMinutes,
           'paceMinPerMile': r.paceMinPerMiles,
           'totalDistanceMiles': r.totalDistanceMiles,

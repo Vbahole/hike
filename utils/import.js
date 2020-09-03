@@ -16,6 +16,7 @@ const parse = (filePath, importPoints) => {
 
   let r = {};
 
+  r.date = moment(parser.tracks[0].points[0].time).format('M/D/YYYY').toString();
   r.totalDistanceMeters = parser.tracks[0].distance.total; // IN METERS!!
 
   // convert to miles

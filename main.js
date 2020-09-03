@@ -4,23 +4,32 @@ let { computeStats } = require(`${appRoot}/utils/stats`);
 let pull = require(`${appRoot}/utils/pull`);
 let { putToDynamo } = require(`${appRoot}/utils/put`);
 let { purgeTable } = require(`${appRoot}/utils/purge`);
+let { testIt } = require(`${appRoot}/utils/test`);
 
 const gpxSourceDir = `${appRoot}/gpx/exports`;
 const dbTableName = 'hike';
 
 // purge
-purgeTable(dbTableName);
+(async () => {
 
-// convert a folder of gpx files into an array of records with some extra spice
-// let gpxRecords = importGpx(gpxSourceDir);
-let gpxRecords = importGpx(gpxSourceDir, 2, false);
-console.log(`${gpxRecords.length} recs imported`);
+    // testIt();
+    await purgeTable(dbTableName);
 
 
-// push them to dynamodb
-putToDynamo(dbTableName, gpxRecords);
+    // convert a folder of gpx files into an array of records with some extra spice
+    let gpxRecords = importGpx(gpxSourceDir);
+    // let gpxRecords = importGpx(gpxSourceDir, 2, false);
+    // console.log(`${gpxRecords.length} recs imported`);
 
-computeStats(dbTableName);
-// computeStats(dbTableName, gpxRecords);
+    // push them to dynamodb
+    putToDynamo(dbTableName, gpxRecords);
 
-// pull.pull();
+
+    // computeStats(dbTableName);
+    computeStats(dbTableName, gpxRecords);
+
+    // pull.pull();
+})().catch(e => {
+    // Deal with the fact the chain failed
+    console.error(`got an error yo - ${e}`);
+});

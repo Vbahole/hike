@@ -24,7 +24,7 @@ const purgeTable = async (dbTableName) => {
     };
 
   gpxRecords = await docClient.query(params).promise();
-
+  console.log(`anything to purge? - ${gpxRecords.Items.length}`);
   for (const item of gpxRecords.Items) {
     params = {
       Key: {
@@ -33,8 +33,11 @@ const purgeTable = async (dbTableName) => {
       },
       TableName: dbTableName
     };
-    await docClient.delete(params);
+    docClient.delete(params, function(err, data) {
+      if (err) console.log(err);
+    });
   };
+  console.log(`done purging`);
 };
 
 exports.purgeTable = purgeTable;
