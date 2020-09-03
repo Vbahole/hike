@@ -13,7 +13,7 @@ var docClient = new AWS.DynamoDB.DocumentClient({
 const putToDynamo = (dbTableName, records) => {
   console.log(`putting ${records.length} records to dynamo table ${dbTableName} \n`);
 
-  return records.map((r) => {
+  return records.map((i) => {
     /*
       let params = {
         TableName: dbTableName,
@@ -28,9 +28,15 @@ const putToDynamo = (dbTableName, records) => {
       };
       */
       // don't define the item while putting it in, just slap it in
+      console.log(`********before****** - ${JSON.stringify(i, null, 2)}`);
+      i.h = 'recording';
+      i.r = i.date;
+      delete i.date;
+      console.log(`********after****** - ${JSON.stringify(i, null, 2)}`);
+
       let params = {
         TableName: dbTableName,
-        Item: r
+        Item: i
       };
 
       docClient.put(params, function(err, data) {
