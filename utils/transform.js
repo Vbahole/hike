@@ -33,9 +33,9 @@ const consolidate = async (dbTableName, gpxRecords) => {
   let dateArr = [];
   let clone = JSON.parse(JSON.stringify(gpxRecords));
 
-  for (let i of clone) {
+  for (const i of clone) {
     console.log(`consolidating this item - ${JSON.stringify(i, null, 2)}`);
-    let rDate = i.date;
+    let rDate = moment(i.r).format('M/D/YYYY').toString();
     console.log(`consolidate rDate is ${rDate}`);
     let ind = dateArr.indexOf(rDate);
     if (ind == -1) {
@@ -43,6 +43,7 @@ const consolidate = async (dbTableName, gpxRecords) => {
         resultArr.push(i);
       }
       else {
+        // combined stats
         resultArr[ind].durationMinutes += i.durationMinutes;
         resultArr[ind].totalDistanceMiles += i.totalDistanceMiles;
         resultArr[ind].paceMinPerMile = (resultArr[ind].durationMinutes / resultArr[ind].totalDistanceMiles);
@@ -70,4 +71,18 @@ const transformRaw = async (gpxRecords) => {
   return Promise.all(gpxRecords.map( i => rawMap(i)));
 }
 
-module.exports = { consolidate, transformRaw };
+const rawConsolidated = async i => {
+  i.h = 'consolidate';
+  i.r = moment(i.r).format('M/D/YYYY').toString();
+  i.firstPointTime = i.firstPointTime.toString();
+  i.lastPointTime = i.lastPointTime.toString();
+  delete i.date;
+  return i;
+};
+
+const transformConsolidated = async (gpxRecords) => {
+  console.log(`transformConsolidated`);
+  return Promise.all(gpxRecords.map( i => rawConsolidated(i)));
+}
+
+module.exports = { consolidate, transformRaw, transformConsolidated };

@@ -14,7 +14,7 @@ const thePut = async (i, dbTableName) => {
     TableName: dbTableName,
     Item: i
   };
-  console.log(`putting------- ${JSON.stringify(params, null, 2)} \n`);
+  // console.log(`putting------- ${JSON.stringify(params, null, 2)} \n`);
   docClient.put(params, function(err, data) {
     if (err) {
       console.log(`PUT error - ${JSON.stringify(err)} \n`)

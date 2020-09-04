@@ -5,7 +5,7 @@ let pull = require(`${appRoot}/utils/pull`);
 let { putToDynamo } = require(`${appRoot}/utils/put`);
 let { purgeRecordings } = require(`${appRoot}/utils/purge`);
 let { testIt } = require(`${appRoot}/utils/test`);
-let { consolidate, transformRaw } = require(`${appRoot}/utils/transform`);
+let { consolidate, transformRaw, transformConsolidated } = require(`${appRoot}/utils/transform`);
 
 const gpxSourceDir = `${appRoot}/gpx/exports`;
 const dbTableName = 'hike';
@@ -15,29 +15,38 @@ const dbTableName = 'hike';
 
     // testIt();
     // return;
+    
 
+    // PURGE
     await purgeRecordings(dbTableName);
 
+    // IMPORT
     // convert a folder of gpx files into an array of records with some extra spice
     // (source directory, import points, limit to a few records for testing)
-    // let gpxRecords = importGpx(gpxSourceDir);
-    let gpxRecords = await importGpx(gpxSourceDir, false, 2);
+    let gpxRecords = importGpx(gpxSourceDir);
+    // let gpxRecords = importGpx(gpxSourceDir, false, 12);
+    // let gpxRecords = await importGpx(gpxSourceDir, false, 2);
     console.log(`${gpxRecords.length} recs imported`);
     // console.log(`********imported****** - ${JSON.stringify(gpxRecords, null, 2)}`);
 
-    // push raw recordings
-    let transformedRecords = await transformRaw(gpxRecords);
+    // TRANSFORM RAW
+    // transform raw recordings
+    let transformedRawRecords = await transformRaw(gpxRecords);
     // console.log(`********transformed****** - ${JSON.stringify(gpxRecords, null, 2)}`);
 
-    await putToDynamo(dbTableName, transformedRecords);
+    // PUT RAW TRANSFORMED
+    await putToDynamo(dbTableName, transformedRawRecords);
 
-    // transform the recordings before they go into dynamodb
+    // CONSOLIDATE
     // consolidate collpases multiple hikes from the same day
     // so you get combined stats but still maintain the points for each day
-    // gpxRecords = await consolidate(dbTableName, gpxRecords);
+    let consolidatedGpxRecords = await consolidate(dbTableName, gpxRecords);
+
+    // TRANSFORM CONSOLIDATED
+    let consolidatedTransformedGpxRecords = await transformConsolidated(consolidatedGpxRecords);
 
     // push consolidated to dynamodb
-    // await putToDynamo(dbTableName, gpxRecords);
+    await putToDynamo(dbTableName, consolidatedTransformedGpxRecords);
 
     // computeStats(dbTableName); // if you are not using the in-memory dataset you better await
     // await computeStats(dbTableName, gpxRecords);
