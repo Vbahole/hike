@@ -10,11 +10,10 @@ var docClient = new AWS.DynamoDB.DocumentClient({
 });
 
 // (dynamo table name, optionally a gpxRecord set, or will pull from aws)
-const computeStats = async (dbTableName, gpxRecords) => {
-  // read all recordings from dynamodb each time - costly
+const computeStats = async (dbTableName, gpxRecords, itemType = 'consolidate') => {
   let params = {
       ExpressionAttributeValues: {
-        ':s': 'recording'
+        ':s': itemType
        },
        KeyConditionExpression: 'h = :s',
        TableName: dbTableName
