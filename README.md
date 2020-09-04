@@ -6,7 +6,7 @@ an app to compile gpx tracks and store them for stats.
 
 uses gpxparser - https://github.com/Luuka/GPXParser.js to read gpx, get distance and time for start end points
 
-## DynamoDB -- hash 'h' string; range 'r' also string
+### DynamoDB -- hash 'h' string; range 'r' also string
   h=recording - range=iso datetime; includes points array, many hikes per 1 day, includes distance/duration/pace stats
 
   h=consolidate - range=date only (06/20/2020), points array with all hikes for the day, stats per by day
@@ -45,9 +45,18 @@ Gpx delivers - lat, lon, elevation, and time. Route and track exports appear to 
 
 this is a fenced code block
 ```
-{
-  "firstName": "John",
-  "lastName": "Smith",
-  "age": 25
-}
+let params = {
+  TableName: 'hike',
+  Item: {
+     "totalDistanceMeters": 1727.5321843222155,
+     "totalDistanceMiles": 1.0734387673507002,
+     "firstPointTime": "2020-08-29T01:20:34.000Z",
+     "lastPointTime": "2020-08-29T01:42:37.000Z",
+     "durationMinutes": 22.05,
+     "paceMinPerMiles": 20.541460463944755,
+     "points": [],
+     "h": "recording",
+     "r": "Fri Aug 28 2020 21:20:34 GMT-0400"
+   }
+  };
 ```
