@@ -13,8 +13,6 @@ var docClient = new AWS.DynamoDB.DocumentClient({
 
 const consolidate = async (dbTableName, gpxRecords) => {
   console.log(`consolidating`);
-
-  // read all recordings
   let params = {
       ExpressionAttributeValues: {
         ':s': 'recording'
@@ -34,9 +32,9 @@ const consolidate = async (dbTableName, gpxRecords) => {
   let clone = JSON.parse(JSON.stringify(gpxRecords));
 
   for (const i of clone) {
-    console.log(`consolidating this item - ${JSON.stringify(i, null, 2)}`);
+    // console.log(`consolidating this item - ${JSON.stringify(i, null, 2)}`);
     let rDate = moment(i.r).format('M/D/YYYY').toString();
-    console.log(`consolidate rDate is ${rDate}`);
+    // console.log(`consolidate rDate is ${rDate}`);
     let ind = dateArr.indexOf(rDate);
     if (ind == -1) {
         dateArr.push(rDate);
@@ -48,11 +46,11 @@ const consolidate = async (dbTableName, gpxRecords) => {
         resultArr[ind].totalDistanceMiles += i.totalDistanceMiles;
         resultArr[ind].paceMinPerMile = (resultArr[ind].durationMinutes / resultArr[ind].totalDistanceMiles);
         resultArr[ind].multiHike = 'true';
-        
+        resultArr[ind].points.push(i.points);
       }
   }
 
-  console.log(`resultArr - ${JSON.stringify(resultArr, null, 2)}`);
+  // console.log(`resultArr - ${JSON.stringify(resultArr, null, 2)}`);
   console.log(`dateArr - ${JSON.stringify(dateArr, null, 2)}`);
 
   return resultArr;
