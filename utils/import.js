@@ -16,7 +16,7 @@ const parse = (filePath, importPoints) => {
 
   let r = {};
 
-  r.date = moment(parser.tracks[0].points[0].time).toString();  
+  r.date = moment(parser.tracks[0].points[0].time).toString();
   // r.date = moment(parser.tracks[0].points[0].time).format('M/D/YYYY').toString();
   r.totalDistanceMeters = parser.tracks[0].distance.total; // IN METERS!!
 
@@ -53,6 +53,7 @@ const importGpx = (gpxSourceDir, importPoints = true, limit) => {
   // read all gpx files from source directory
   const files = fs.readdirSync(gpxSourceDir).filter(filename => filename.match(/.*\.(gpx)/ig));
   console.log(`IMPORTING ${files.length} gpx files from ${gpxSourceDir} points = ${importPoints}`);
+
   return files.slice(0, limit).map((file, index) => {
     console.log(`import- ${index + 1}/${files.length}`)
     return parse(path.join(gpxSourceDir, file), importPoints);

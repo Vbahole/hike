@@ -21,12 +21,13 @@ const dbTableName = 'hike';
     // let gpxRecords = importGpx(gpxSourceDir);
     let gpxRecords = await importGpx(gpxSourceDir, false, 10);
     console.log(`${gpxRecords.length} recs imported`);
-    console.log(`********imported****** - ${JSON.stringify(gpxRecords, null, 2)}`);
+    // console.log(`********imported****** - ${JSON.stringify(gpxRecords, null, 2)}`);
 
     // push raw recordings
-    await transformRaw(gpxRecords);
+    let gpxRecords2 = await transformRaw(gpxRecords);
+    console.log(`********transformed****** - ${JSON.stringify(gpxRecords2, null, 2)}`);
 
-    // await putToDynamo(gpxRecords);
+    // await putToDynamo(gpxRecords2);
 
     // transform the recordings before they go into dynamodb
     // consolidate collpases multiple hikes from the same day

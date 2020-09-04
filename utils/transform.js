@@ -56,15 +56,16 @@ const consolidate = async (dbTableName, gpxRecords) => {
   return resultArr;
 };
 
+const rawMap = async i => {
+  i.h = 'recording';
+  i.r = i.date;
+  delete i.date;
+  return i;
+};
+
 const transformRaw = async (gpxRecords) => {
   console.log(`transformRaw`);
-  return gpxRecords.map((i) => {
-      console.log(`********before****** - ${JSON.stringify(i, null, 2)}`);
-      i.h = 'recording';
-      i.r = i.date;
-      delete i.date;
-      console.log(`********after****** - ${JSON.stringify(i, null, 2)}`);
-    });
+  return Promise.all(gpxRecords.map( i => rawMap(i)));
 }
 
 module.exports = { consolidate, transformRaw };
