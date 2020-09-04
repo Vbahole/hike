@@ -10,7 +10,7 @@ var docClient = new AWS.DynamoDB.DocumentClient({
 });
 
 // (destination dynamo table name, parsed gpx files)
-const putToDynamo = (dbTableName, records) => {
+const putToDynamo = async (dbTableName, records) => {
   console.log(`putting ${records.length} records to dynamo table ${dbTableName} \n`);
 
   return records.map((i) => {

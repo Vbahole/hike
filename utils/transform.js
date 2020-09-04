@@ -31,9 +31,9 @@ const consolidate = async (dbTableName, gpxRecords) => {
   // DAILY CONSOLIDATE
   let resultArr = [];
   let dateArr = [];
-  let dailyClone = JSON.parse(JSON.stringify(gpxRecords));
+  let clone = JSON.parse(JSON.stringify(gpxRecords));
 
-  for (let i of dailyClone) {
+  for (let i of clone) {
     console.log(`consolidating this item - ${JSON.stringify(i, null, 2)}`);
     let rDate = i.date;
     console.log(`consolidate rDate is ${rDate}`);
@@ -56,4 +56,15 @@ const consolidate = async (dbTableName, gpxRecords) => {
   return resultArr;
 };
 
-exports.consolidate = consolidate;
+const transformRaw = async (gpxRecords) => {
+  console.log(`transformRaw`);
+  return gpxRecords.map((i) => {
+      console.log(`********before****** - ${JSON.stringify(i, null, 2)}`);
+      i.h = 'recording';
+      i.r = i.date;
+      delete i.date;
+      console.log(`********after****** - ${JSON.stringify(i, null, 2)}`);
+    });
+}
+
+module.exports = { consolidate, transformRaw };

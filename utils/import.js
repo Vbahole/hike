@@ -16,7 +16,8 @@ const parse = (filePath, importPoints) => {
 
   let r = {};
 
-  r.date = moment(parser.tracks[0].points[0].time).format('M/D/YYYY').toString();
+  r.date = moment(parser.tracks[0].points[0].time).toString();  
+  // r.date = moment(parser.tracks[0].points[0].time).format('M/D/YYYY').toString();
   r.totalDistanceMeters = parser.tracks[0].distance.total; // IN METERS!!
 
   // convert to miles
@@ -37,9 +38,9 @@ const parse = (filePath, importPoints) => {
   r.durationMinutes = duration.asMinutes();
 
   // AllTrails would use moving time for this pace and not total time
-  r.paceMinPerMile = r.durationMinutes / r.totalDistanceMiles;
+  r.paceMinPerMiles = r.durationMinutes / r.totalDistanceMiles;
   if (importPoints){
-    // points is an array to handle multi-hike days
+    // points is an array to handle multi
     r.points = [ parser.tracks[0].points ];
   } else {
     r.points = [];
