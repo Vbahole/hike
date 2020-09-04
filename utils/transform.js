@@ -48,6 +48,7 @@ const consolidate = async (dbTableName, gpxRecords) => {
         resultArr[ind].totalDistanceMiles += i.totalDistanceMiles;
         resultArr[ind].paceMinPerMile = (resultArr[ind].durationMinutes / resultArr[ind].totalDistanceMiles);
         resultArr[ind].multiHike = 'true';
+        
       }
   }
 

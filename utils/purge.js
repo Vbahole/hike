@@ -9,15 +9,13 @@ var docClient = new AWS.DynamoDB.DocumentClient({
   apiVersion: '2012-08-10'
 });
 
-// (dynamo table name)
-const purgeRecordings = async (dbTableName) => {
-  console.log(`purging recordings`);
-  let params;
+// (dynamo table name, term to select on)
+const purgeItems = async (dbTableName, term) => {
+  console.log(`purging all - "${term}"`);
 
-  // read all recordings from dynamodb
-  params = {
+  let params = {
       ExpressionAttributeValues: {
-        ':s': 'recording'
+        ':s': term
        },
        KeyConditionExpression: 'h = :s',
        TableName: dbTableName
@@ -40,4 +38,4 @@ const purgeRecordings = async (dbTableName) => {
   console.log(`done purging`);
 };
 
-exports.purgeRecordings = purgeRecordings;
+exports.purgeItems = purgeItems;
