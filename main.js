@@ -3,7 +3,7 @@ let { importGpx } = require(`${appRoot}/utils/import`);
 let { computeStats } = require(`${appRoot}/utils/stats`);
 let pull = require(`${appRoot}/utils/pull`);
 let { putToDynamo } = require(`${appRoot}/utils/put`);
-let { purgeTable } = require(`${appRoot}/utils/purge`);
+let { purgeRecordings } = require(`${appRoot}/utils/purge`);
 let { testIt } = require(`${appRoot}/utils/test`);
 let { consolidate, transformRaw } = require(`${appRoot}/utils/transform`);
 
@@ -14,20 +14,22 @@ const dbTableName = 'hike';
 (async () => {
 
     // testIt();
-    await purgeTable(dbTableName);
+    // return;
+
+    await purgeRecordings(dbTableName);
 
     // convert a folder of gpx files into an array of records with some extra spice
     // (source directory, import points, limit to a few records for testing)
     // let gpxRecords = importGpx(gpxSourceDir);
-    let gpxRecords = await importGpx(gpxSourceDir, false, 10);
+    let gpxRecords = await importGpx(gpxSourceDir, false, 2);
     console.log(`${gpxRecords.length} recs imported`);
     // console.log(`********imported****** - ${JSON.stringify(gpxRecords, null, 2)}`);
 
     // push raw recordings
-    let gpxRecords2 = await transformRaw(gpxRecords);
-    console.log(`********transformed****** - ${JSON.stringify(gpxRecords2, null, 2)}`);
+    let transformedRecords = await transformRaw(gpxRecords);
+    // console.log(`********transformed****** - ${JSON.stringify(gpxRecords, null, 2)}`);
 
-    // await putToDynamo(gpxRecords2);
+    await putToDynamo(dbTableName, transformedRecords);
 
     // transform the recordings before they go into dynamodb
     // consolidate collpases multiple hikes from the same day

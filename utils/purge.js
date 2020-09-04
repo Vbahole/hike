@@ -10,8 +10,8 @@ var docClient = new AWS.DynamoDB.DocumentClient({
 });
 
 // (dynamo table name)
-const purgeTable = async (dbTableName) => {
-  console.log(`purging`);
+const purgeRecordings = async (dbTableName) => {
+  console.log(`purging recordings`);
   let params;
 
   // read all recordings from dynamodb
@@ -40,4 +40,4 @@ const purgeTable = async (dbTableName) => {
   console.log(`done purging`);
 };
 
-exports.purgeTable = purgeTable;
+exports.purgeRecordings = purgeRecordings;

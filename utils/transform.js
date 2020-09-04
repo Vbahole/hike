@@ -59,6 +59,8 @@ const consolidate = async (dbTableName, gpxRecords) => {
 const rawMap = async i => {
   i.h = 'recording';
   i.r = i.date;
+  i.firstPointTime = i.firstPointTime.toString();
+  i.lastPointTime = i.lastPointTime.toString();
   delete i.date;
   return i;
 };
