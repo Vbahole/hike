@@ -38,6 +38,8 @@ const consolidate = async (dbTableName, gpxRecords) => {
     let ind = dateArr.indexOf(rDate);
     if (ind == -1) {
         dateArr.push(rDate);
+        i.multiHike = false;
+        i.hikeCount = 1;
         resultArr.push(i);
       }
       else {
@@ -45,7 +47,8 @@ const consolidate = async (dbTableName, gpxRecords) => {
         resultArr[ind].durationMinutes += i.durationMinutes;
         resultArr[ind].totalDistanceMiles += i.totalDistanceMiles;
         resultArr[ind].paceMinPerMile = (resultArr[ind].durationMinutes / resultArr[ind].totalDistanceMiles);
-        resultArr[ind].multiHike = 'true';
+        resultArr[ind].multiHike = true;
+        resultArr[ind].hikeCount += 1;
         resultArr[ind].points.push(i.points);
       }
   }

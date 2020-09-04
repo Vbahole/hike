@@ -29,6 +29,7 @@ const computeStats = async (dbTableName, gpxRecords, itemType = 'consolidate') =
   const totalDurationMinutes = gpxRecords.reduce((accum,item) => accum + item.durationMinutes, 0);
   const totalDurationHours = moment.duration(totalDurationMinutes, 'minutes').asHours();
   const overallPace = totalDurationMinutes / totalDistance;
+  const hikeCount = gpxRecords.reduce((accum,item) => accum + item.hikeCount, 0);
 
   params = {
     TableName: dbTableName,
@@ -38,7 +39,8 @@ const computeStats = async (dbTableName, gpxRecords, itemType = 'consolidate') =
       'totalDistanceMiles': totalDistance,
       'totalDurationMinutes': totalDurationMinutes,
       'totalDurationHours': totalDurationHours,
-      'overallPaceMinutesPerMile': overallPace
+      'overallPaceMinutesPerMile': overallPace,
+      'hikeCount': hikeCount
     }
   };
 
