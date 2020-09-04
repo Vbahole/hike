@@ -43,7 +43,7 @@ The dynamo trigger would fire on any inserts, the dedup should take care of send
 On each insert run a lambda that compiles the current recording and feed back some summary stats to that, but also write to another dynamo item that is a stat warehouse with different kinds of breakdowns
 Gpx delivers - lat, lon, elevation, and time. Route and track exports appear to be the same but the elevation is off between the two - very odd
 
-this is a fenced code block
+recording:
 ```
 let params = {
   TableName: 'hike',
