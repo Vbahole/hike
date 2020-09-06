@@ -12,6 +12,16 @@ uses gpxparser - https://github.com/Luuka/GPXParser.js to read gpx, get distance
   h=consolidate - range=date only (06/20/2020), points array with all hikes for the day, stats per by day
   h=stats - r=overall - calculated on the whole dataset (right now during import, but could be offline/periodic)
 
+## stat ideas
+- weekly totals
+- number of hikes by mileage
+- longest/shortest hike
+- average hike length/duration
+- streaks
+- current week total
+- monthly breakdowns
+
+
 ## issues
 ----------
 - moving time - can't calc that, yet
