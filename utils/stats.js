@@ -34,6 +34,9 @@ const computeStats = async (dbTableName, gpxRecords, itemType = 'consolidate') =
   const mostHikesInOneDay = gpxRecords.reduce((accum, item) =>
      ( accum.hikeCount || 0 ) > item.hikeCount ? accum : item, {});
 
+ const mostMilesHikedInOneDay = gpxRecords.reduce((accum, item) =>
+    ( accum.totalDistanceMiles || 0 ) > item.totalDistanceMiles ? accum : item, {});
+
 //  const mostHikesInOneDay = gpxRecords.reduce(function (accum, item) {
 //    return (accum.hikeCount || 0) > item.hikeCount ? accum : item;
 //  }, {});
@@ -51,6 +54,10 @@ const computeStats = async (dbTableName, gpxRecords, itemType = 'consolidate') =
       'mostHikesInOneDay': {
         'hikes': mostHikesInOneDay.hikeCount,
         'date': mostHikesInOneDay.r
+      },
+      'mostMilesHikedInOneDay': {
+        'miles': mostMilesHikedInOneDay.totalDistanceMiles,
+        'date': mostMilesHikedInOneDay.r
         }
       }
     };
