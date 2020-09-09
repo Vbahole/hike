@@ -12,13 +12,13 @@ var docClient = new AWS.DynamoDB.DocumentClient({
 // (dynamo table name, optionally a gpxRecord set, or will pull from aws)
 const computeStats = async (dbTableName, gpxRecords, itemType = 'consolidate') => {
   let params = {
-      ExpressionAttributeValues: {
-        ':s': itemType
-       },
-       KeyConditionExpression: 'h = :s',
-       TableName: dbTableName
-    };
-  if (!gpxRecords){
+    ExpressionAttributeValues: {
+      ':s': itemType
+    },
+    KeyConditionExpression: 'h = :s',
+    TableName: dbTableName
+  };
+  if (!gpxRecords) {
     gpxRecords = await docClient.query(params).promise();
     gpxRecords = gpxRecords.Items;
   }
@@ -32,24 +32,24 @@ const computeStats = async (dbTableName, gpxRecords, itemType = 'consolidate') =
   const totalHikeCount = gpxRecords.reduce((accum, item) => accum + item.hikeCount, 0);
 
   const mostHikesInOneDay = gpxRecords.reduce((accum, item) =>
-    ( accum.hikeCount || 0 ) > item.hikeCount ? accum : item, {});
+    (accum.hikeCount || 0) > item.hikeCount ? accum : item, {});
 
   const mostMilesHikedInOneDay = gpxRecords.reduce((accum, item) =>
-    ( accum.totalDistanceMiles || 0 ) > item.totalDistanceMiles ? accum : item, {});
+    (accum.totalDistanceMiles || 0) > item.totalDistanceMiles ? accum : item, {});
 
   // const hikesInAugust = gpxRecords.filter(i => i.r == '8/11/2020');
-  const hikesInAugust = gpxRecords.filter(function (i) {
+  const hikesInAugust = gpxRecords.filter(function(i) {
     console.log(`what week is it - ${moment(i.r).week()}`);
-      return i.r === '8/11/2020';
-    });
+    return i.r === '8/11/2020';
+  });
   // console.log(`any august - ${JSON.stringify(hikesInAugust)}`);
 
-  const byWeeks = gpxRecords.reduce(function (accum, item) {
+  const byWeeks = gpxRecords.reduce(function(accum, item) {
     let w = moment(item.r, 'MM/DD/YYYY').week();
     accum[w] = accum[w] || [];
     accum[w].push(item);
     return accum;
-    }, {});
+  }, {});
   console.log(`byWeeks - ${JSON.stringify(byWeeks, null, 2)}`);
 
   // const statsByWeek = byWeeks.reduce((accum, item) => accum + item.hikeCount, 0);
@@ -66,18 +66,18 @@ const computeStats = async (dbTableName, gpxRecords, itemType = 'consolidate') =
       'overallPaceMinutesPerMile': overallPace,
       'totalHikeCount': totalHikeCount,
       'mostHikesInOneDay': {
-          'hikes': mostHikesInOneDay.hikeCount,
-          'date': mostHikesInOneDay.r
-        },
+        'hikes': mostHikesInOneDay.hikeCount,
+        'date': mostHikesInOneDay.r
+      },
       'mostMilesHikedInOneDay': {
-          'miles': mostMilesHikedInOneDay.totalDistanceMiles,
-          'date': mostMilesHikedInOneDay.r
-        },
+        'miles': mostMilesHikedInOneDay.totalDistanceMiles,
+        'date': mostMilesHikedInOneDay.r
+      },
       'hikesInAugust': {
-          'hike': hikesInAugust[0].r
-        }
+        'hike': hikesInAugust[0].r
       }
-    };
+    }
+  };
 
   console.log(`stats overall put params ${JSON.stringify(params)}`);
 

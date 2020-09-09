@@ -1,7 +1,9 @@
 let AWS = require('aws-sdk');
 let moment = require('moment');
 const appRoot = require('app-root-path');
-let { kill } = require(`${appRoot}/utils/kill-points`);
+let {
+  kill
+} = require(`${appRoot}/utils/kill-points`);
 
 // AWS
 AWS.config.update({
@@ -14,13 +16,13 @@ var docClient = new AWS.DynamoDB.DocumentClient({
 const consolidate = async (dbTableName, gpxRecords) => {
   console.log(`consolidating`);
   let params = {
-      ExpressionAttributeValues: {
-        ':s': 'recording'
-       },
-       KeyConditionExpression: 'h = :s',
-       TableName: dbTableName
-    };
-  if (!gpxRecords){
+    ExpressionAttributeValues: {
+      ':s': 'recording'
+    },
+    KeyConditionExpression: 'h = :s',
+    TableName: dbTableName
+  };
+  if (!gpxRecords) {
     gpxRecords = await docClient.query(params).promise();
     gpxRecords = gpxRecords.Items;
   }
@@ -37,20 +39,19 @@ const consolidate = async (dbTableName, gpxRecords) => {
     // console.log(`consolidate rDate is ${rDate}`);
     let ind = dateArr.indexOf(rDate);
     if (ind == -1) {
-        dateArr.push(rDate);
-        i.multiHike = false;
-        i.hikeCount = 1;
-        resultArr.push(i);
-      }
-      else {
-        // combined stats
-        resultArr[ind].durationMinutes += i.durationMinutes;
-        resultArr[ind].totalDistanceMiles += i.totalDistanceMiles;
-        resultArr[ind].paceMinPerMile = (resultArr[ind].durationMinutes / resultArr[ind].totalDistanceMiles);
-        resultArr[ind].multiHike = true;
-        resultArr[ind].hikeCount += 1;
-        resultArr[ind].points.push(i.points);
-      }
+      dateArr.push(rDate);
+      i.multiHike = false;
+      i.hikeCount = 1;
+      resultArr.push(i);
+    } else {
+      // combined stats
+      resultArr[ind].durationMinutes += i.durationMinutes;
+      resultArr[ind].totalDistanceMiles += i.totalDistanceMiles;
+      resultArr[ind].paceMinPerMile = (resultArr[ind].durationMinutes / resultArr[ind].totalDistanceMiles);
+      resultArr[ind].multiHike = true;
+      resultArr[ind].hikeCount += 1;
+      resultArr[ind].points.push(i.points);
+    }
   }
 
   // console.log(`resultArr - ${JSON.stringify(resultArr, null, 2)}`);
@@ -70,7 +71,7 @@ const rawMap = async i => {
 
 const transformRaw = async (gpxRecords) => {
   console.log(`transformRaw`);
-  return Promise.all(gpxRecords.map( i => rawMap(i)));
+  return Promise.all(gpxRecords.map(i => rawMap(i)));
 }
 
 const rawConsolidated = async i => {
@@ -84,7 +85,7 @@ const rawConsolidated = async i => {
 
 const transformConsolidated = async (gpxRecords) => {
   console.log(`transformConsolidated`);
-  return Promise.all(gpxRecords.map( i => rawConsolidated(i)));
+  return Promise.all(gpxRecords.map(i => rawConsolidated(i)));
 }
 
 
@@ -96,7 +97,12 @@ const rawATMap = async i => {
 
 const transformATMAp = async (records) => {
   console.log(`transformATMAp`);
-  return Promise.all(records.map( i => rawATMap(i)));
+  return Promise.all(records.map(i => rawATMap(i)));
 }
 
-module.exports = { consolidate, transformRaw, transformConsolidated, transformATMAp };
+module.exports = {
+  consolidate,
+  transformRaw,
+  transformConsolidated,
+  transformATMAp
+};

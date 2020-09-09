@@ -4,7 +4,9 @@ let path = require('path');
 let AWS = require("aws-sdk");
 var util = require('util');
 // var log_file = fs.createWriteStream(__dirname + '/debug.log', {flags : 'w'});
-var log_file = fs.createWriteStream(`${appRoot}/logs/debug.log`, {flags : 'w'});
+var log_file = fs.createWriteStream(`${appRoot}/logs/debug.log`, {
+  flags: 'w'
+});
 var log_stdout = process.stdout;
 
 console.log = function(d) { //
@@ -30,7 +32,10 @@ async function pull() {
     if (err) {
       console.log("Error", err);
     } else {
-      let result = data.Items.map(({points, ...rest}) => rest); // remove track
+      let result = data.Items.map(({
+        points,
+        ...rest
+      }) => rest); // remove track
       // const { a, ...rest } = data;
       // let result = data.Items.map(({track, ...rest}) => rest);
       // let result = data;

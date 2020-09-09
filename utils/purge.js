@@ -14,12 +14,12 @@ const purgeItems = async (dbTableName, term) => {
   console.log(`purging all - "${term}"`);
 
   let params = {
-      ExpressionAttributeValues: {
-        ':s': term
-       },
-       KeyConditionExpression: 'h = :s',
-       TableName: dbTableName
-    };
+    ExpressionAttributeValues: {
+      ':s': term
+    },
+    KeyConditionExpression: 'h = :s',
+    TableName: dbTableName
+  };
 
   gpxRecords = await docClient.query(params).promise();
   console.log(`anything to purge? - ${gpxRecords.Items.length}`);

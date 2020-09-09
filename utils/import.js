@@ -39,9 +39,9 @@ const parse = (filePath, importPoints) => {
 
   // AllTrails would use moving time for this pace and not total time
   r.paceMinPerMiles = r.durationMinutes / r.totalDistanceMiles;
-  if (importPoints){
+  if (importPoints) {
     // points is an array to handle multi
-    r.points = [ parser.tracks[0].points ];
+    r.points = [parser.tracks[0].points];
   } else {
     r.points = [];
   }
