@@ -32,14 +32,28 @@ const computeStats = async (dbTableName, gpxRecords, itemType = 'consolidate') =
   const totalHikeCount = gpxRecords.reduce((accum, item) => accum + item.hikeCount, 0);
 
   const mostHikesInOneDay = gpxRecords.reduce((accum, item) =>
-     ( accum.hikeCount || 0 ) > item.hikeCount ? accum : item, {});
+    ( accum.hikeCount || 0 ) > item.hikeCount ? accum : item, {});
 
- const mostMilesHikedInOneDay = gpxRecords.reduce((accum, item) =>
+  const mostMilesHikedInOneDay = gpxRecords.reduce((accum, item) =>
     ( accum.totalDistanceMiles || 0 ) > item.totalDistanceMiles ? accum : item, {});
 
-//  const mostHikesInOneDay = gpxRecords.reduce(function (accum, item) {
-//    return (accum.hikeCount || 0) > item.hikeCount ? accum : item;
-//  }, {});
+  // const hikesInAugust = gpxRecords.filter(i => i.r == '8/11/2020');
+  const hikesInAugust = gpxRecords.filter(function (i) {
+    console.log(`what week is it - ${moment(i.r).week()}`);
+      return i.r === '8/11/2020';
+    });
+  // console.log(`any august - ${JSON.stringify(hikesInAugust)}`);
+
+  const byWeeks = gpxRecords.reduce(function (accum, item) {
+    let w = moment(item.r, 'MM/DD/YYYY').week();
+    accum[w] = accum[w] || [];
+    accum[w].push(item);
+    return accum;
+    }, {});
+  console.log(`byWeeks - ${JSON.stringify(byWeeks, null, 2)}`);
+
+  // const statsByWeek = byWeeks.reduce((accum, item) => accum + item.hikeCount, 0);
+  // console.log(`statsByWeek - ${JSON.stringify(statsByWeek, null, 2)}`);
 
   params = {
     TableName: dbTableName,
@@ -52,12 +66,15 @@ const computeStats = async (dbTableName, gpxRecords, itemType = 'consolidate') =
       'overallPaceMinutesPerMile': overallPace,
       'totalHikeCount': totalHikeCount,
       'mostHikesInOneDay': {
-        'hikes': mostHikesInOneDay.hikeCount,
-        'date': mostHikesInOneDay.r
-      },
+          'hikes': mostHikesInOneDay.hikeCount,
+          'date': mostHikesInOneDay.r
+        },
       'mostMilesHikedInOneDay': {
-        'miles': mostMilesHikedInOneDay.totalDistanceMiles,
-        'date': mostMilesHikedInOneDay.r
+          'miles': mostMilesHikedInOneDay.totalDistanceMiles,
+          'date': mostMilesHikedInOneDay.r
+        },
+      'hikesInAugust': {
+          'hike': hikesInAugust[0].r
         }
       }
     };

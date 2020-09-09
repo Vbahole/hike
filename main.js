@@ -24,8 +24,8 @@ const dbTableName = 'hike';
     // IMPORT
     // convert a folder of gpx files into an array of records with some extra spice
     // (source directory, import points, limit to a few records for testing)
-    let gpxRecords = importGpx(gpxSourceDir);
-    // let gpxRecords = importGpx(gpxSourceDir, false, 12);
+    // let gpxRecords = importGpx(gpxSourceDir);
+    let gpxRecords = importGpx(gpxSourceDir, false, 12);
     // let gpxRecords = await importGpx(gpxSourceDir, false, 2);
     console.log(`${gpxRecords.length} recs imported`);
     // console.log(`********imported****** - ${JSON.stringify(gpxRecords, null, 2)}`);
