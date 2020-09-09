@@ -2,11 +2,12 @@ let appRoot = require('app-root-path');
 let { importGpx } = require(`${appRoot}/utils/import`);
 let { importATmap } = require(`${appRoot}/utils/import-at-map`);
 let { computeStats } = require(`${appRoot}/utils/stats`);
+let { computeStatsATMap } = require(`${appRoot}/utils/stats-at-map`);
 let pull = require(`${appRoot}/utils/pull`);
 let { putToDynamo } = require(`${appRoot}/utils/put`);
 let { purgeItems } = require(`${appRoot}/utils/purge`);
 let { testIt } = require(`${appRoot}/utils/test`);
-let { consolidate, transformRaw, transformConsolidated } = require(`${appRoot}/utils/transform`);
+let { consolidate, transformRaw, transformConsolidated, transformATMAp } = require(`${appRoot}/utils/transform`);
 
 const gpxSourceDir = `${appRoot}/gpx/exports`;
 const atmapSourceFile = `${appRoot}/stubs/at-track-medium.json`;
@@ -18,14 +19,21 @@ const dbTableName = 'hike';
     // testIt();
     // return;
 
-    let mapsObject = importATmap(atmapSourceFile);
-    // console.log(`got a mapsObject - ${ mapsObject }`);
-    // console.dir(mapsObject);
-    return;
-
     // PURGE
     await purgeItems(dbTableName, 'recording');
     await purgeItems(dbTableName, 'consolidate');
+    await purgeItems(dbTableName, 'at-map-medium');
+
+    let mapsObject = importATmap(atmapSourceFile);
+    // console.log(`got a mapsObject - ${ mapsObject }`);
+    // console.dir(mapsObject);
+
+    let transformedATMapRecords = await transformATMAp(mapsObject);
+
+    await computeStatsATMap(dbTableName, transformedATMapRecords);
+    // await putToDynamo(dbTableName, mapsObject);
+return;
+
 
     // IMPORT
     // convert a folder of gpx files into an array of records with some extra spice

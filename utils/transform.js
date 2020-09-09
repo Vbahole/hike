@@ -87,4 +87,16 @@ const transformConsolidated = async (gpxRecords) => {
   return Promise.all(gpxRecords.map( i => rawConsolidated(i)));
 }
 
-module.exports = { consolidate, transformRaw, transformConsolidated };
+
+const rawATMap = async i => {
+  i.h = 'at-map-medium';
+  i.r = i.created_at.toString();
+  return i;
+};
+
+const transformATMAp = async (records) => {
+  console.log(`transformATMAp`);
+  return Promise.all(records.map( i => rawATMap(i)));
+}
+
+module.exports = { consolidate, transformRaw, transformConsolidated, transformATMAp };
