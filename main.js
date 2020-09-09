@@ -1,5 +1,6 @@
 let appRoot = require('app-root-path');
 let { importGpx } = require(`${appRoot}/utils/import`);
+let { importATmap } = require(`${appRoot}/utils/import-at-map`);
 let { computeStats } = require(`${appRoot}/utils/stats`);
 let pull = require(`${appRoot}/utils/pull`);
 let { putToDynamo } = require(`${appRoot}/utils/put`);
@@ -8,6 +9,7 @@ let { testIt } = require(`${appRoot}/utils/test`);
 let { consolidate, transformRaw, transformConsolidated } = require(`${appRoot}/utils/transform`);
 
 const gpxSourceDir = `${appRoot}/gpx/exports`;
+const atmapSourceFile = `${appRoot}/stubs/at-track-medium.json`;
 const dbTableName = 'hike';
 
 // purge
@@ -16,6 +18,10 @@ const dbTableName = 'hike';
     // testIt();
     // return;
 
+    let mapsObject = importATmap(atmapSourceFile);
+    // console.log(`got a mapsObject - ${ mapsObject }`);
+    // console.dir(mapsObject);
+    return;
 
     // PURGE
     await purgeItems(dbTableName, 'recording');
