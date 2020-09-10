@@ -32,24 +32,13 @@ const computeStatsATMap = async (dbTableName, records, itemType = 'at-map-medium
   const totalHikeCount = records.reduce((accum, item) => accum + 1, 0);
 
   // these now work against dailys unlike consolidated gpx recordings
-  //  var mostHikesInOneDay = records.reduce(function (accum, item) {
-  //    return (moment(accum.r, 'MM/DD/YYYY') || 0) > moment(accum.r, 'MM/DD/YYYY') ? accum : item;
-  //  });
-
   const hikesPerDay = records.reduce(function (accum, item) {
     let iDate = moment(item.r).format('MM/DD/YYYY');
-    // console.log(`what is it - accum=${JSON.stringify(accum)} item=${JSON.stringify(item)}`);
-    // accum[iDate] = accum[iDate] + 1 || 1;
     accum[iDate] = (accum[iDate] || 0) + 1;
     return accum;
   }, {});
   let maxHikeCount = Math.max(...Object.values(hikesPerDay));
   let maxHikeDays = Object.keys(hikesPerDay).filter(k => hikesPerDay[k] === maxHikeCount);
-
-  console.log(maxHikeCount);
-  console.log(maxHikeDays);
-  console.log(`maxHikeCount - ${JSON.stringify(maxHikeCount, null, 2)}`);
-  console.log(`maxHikeDays - ${JSON.stringify(maxHikeDays, null, 2)}`);
   /*
   hikesPerDay - {
     "09/08/2020": 2,
@@ -58,6 +47,16 @@ const computeStatsATMap = async (dbTableName, records, itemType = 'at-map-medium
   }
   */
 
+  const metersPerDay = records.reduce(function (accum, item) {
+    let iDate = moment(item.r).format('MM/DD/YYYY');
+    accum[iDate] = (accum[iDate] || 0) + item.summaryStats.distanceTotal;
+    return accum;
+  }, {});
+  console.log(`metersPerDay - ${JSON.stringify(metersPerDay, null, 2)}`);
+  let maxMetersPerDay = Math.max(...Object.values(metersPerDay));
+  let maxMetersDay = Object.keys(metersPerDay).filter(k => metersPerDay[k] === maxMetersPerDay);
+  console.log(`maxMetersPerDay - ${JSON.stringify(maxMetersPerDay, null, 2)}`);
+  console.log(`maxMetersDay - ${JSON.stringify(maxMetersDay, null, 2)}`);
   /*
     let arr = ['foo', 'foo', 'foo', 'bar', 'bar', 'bar', 'baz', 'baz'];
     let counts = arr.reduce((a, c) => {
@@ -104,25 +103,19 @@ const computeStatsATMap = async (dbTableName, records, itemType = 'at-map-medium
     Item: {
       'h': 'stat',
       'r': 'overall',
-      'totalDistanceMiles': totalDistance,
+      'totalDistanceMeters': totalDistance,
       'totalDurationMinutes': totalDurationMinutes,
       'totalDurationHours': totalDurationHours,
-      'overallPaceMinutesPerMile': overallPace,
+      'overallPaceMinutesPerKilometer': overallPace,
       'totalHikeCount': totalHikeCount,
       'mostHikesInOneDay': {
           'hikes': maxHikeCount,
           'dates': maxHikeDays
+        },
+      'mostMetersHikedInOneDay': {
+          'meters': maxMetersPerDay,
+          'date': maxMetersDay
         }
-/*
-        ,
-            'mostMilesHikedInOneDay': {
-                'miles': mostMilesHikedInOneDay.totalDistanceMiles,
-                'date': mostMilesHikedInOneDay.r
-              },
-            'hikesInAugust': {
-                'hike': hikesInAugust[0].r
-              }
-      */
     }
   };
 
