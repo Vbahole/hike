@@ -90,9 +90,11 @@ const transformConsolidated = async (gpxRecords) => {
 
 
 const rawATMap = async i => {
-  i.h = 'at-map-medium';
-  i.r = i.created_at.toString();
-  return i;
+  let t = {};
+  t.h = 'at-map-medium';
+  t.r = i.created_at.toString();
+  t.summaryStats = i.summaryStats;
+  return t;
 };
 
 const transformATMAp = async (records) => {
