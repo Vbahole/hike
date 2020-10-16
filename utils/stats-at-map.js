@@ -108,7 +108,6 @@ const computeStatsATMap = async (dbTableName, records, itemType = 'at-map-medium
     if (err) {
       console.log(`stats Error in put ${JSON.stringify(err)}`);
     } else {
-      console.log("Stats put successfully", data);
     }
   });
 };

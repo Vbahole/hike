@@ -29,10 +29,9 @@ const dbTableName = 'hike';
 
   // STATS
   await computeStatsATMap(dbTableName, transformedATMapRecords);
-  return;
 
   // PUT
-  await putToDynamo(dbTableName, transformedRawRecords);
+  await putToDynamo(dbTableName, transformedATMapRecords);
 
 })().catch(e => {
   console.error(`HEY - got an error yo - ${e}`);
