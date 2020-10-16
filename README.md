@@ -4,22 +4,25 @@ an app to compile gpx tracks and store them for stats.
 
 `nodemon main.js`
 
-uses gpxparser - <https://github.com/Luuka/GPXParser.js> to read gpx, get distance and time for start end points
+## AllTrails recording exports in gpx formula
+- uses gpxparser - <https://github.com/Luuka/GPXParser.js> to read gpx, get distance and time from start end points
+- cannot get moving time and have to export all recordings manually
 
-Don't consolidate AT ALL - everything can still be computed from the multi-hike days!!!
-or jacked out of AllTrails.
-
-## AllTrails map endpoint
-
+## AllTrails request version (at-map) - Upload results of All Trails 'map' xhr request jacked via dev tools
 <https://www.alltrails.com/api/alltrails/my/maps?presentation_type=track&detail=medium>
-call it at-map -- jacked from devtools.
-challenge is to make the steps below work with different import methods
+pick and choose which fields from the raw response to push to dynamo
+
+After the import, code works the same for both (based on consolidation choices)
+
+## To Consolidate?
+a) throw all of the raw recording data into dynamo
+and/or
+b) collapse multi hikes by day to get a daily tally/stats for multi-hike days
 
 ## Main Steps
-
--   import - records from at-map or directory of gpx files exported from AT
--   transform gpx - files need parser like gpxparser to get distance/time/pace
--   transform at-map - filter out excess nonsense or maybe just dump to dynamo as is
+-   import - from at-map or directory of gpx AT file exports
+-   transform:gpx - files need parser like gpxparser to get distance/time/pace
+-   transform:at-map - filter fields before dynamo dump
 -   consolidate - flatten multiple hikes in the same day to get compilation stats
 -   put - send to dynamo
 -   stats - build stats on either the raw daily gpx tracks or the consolidate

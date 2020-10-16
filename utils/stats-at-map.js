@@ -69,6 +69,8 @@ const computeStatsATMap = async (dbTableName, records, itemType = 'at-map-medium
     let mostFrequent = Object.keys(counts).filter(k => counts[k] === maxCount);
   */
 
+  //TODO:: meters per week
+
   /*
   var mostExpPilot = pilots.reduce(function (oldest, pilot) {
     return (oldest.years || 0) > pilot.years ? oldest : pilot;
