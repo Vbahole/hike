@@ -76,8 +76,9 @@ const computeStatsATMap = async (dbTableName, records, itemType = 'at-map-medium
     return accum;
   }, {});
 
+  let maxMetersPerDay = Math.max(...Object.values(metersPerDay));
   let maxKmPerDay = convert(Math.max(...Object.values(metersPerDay))).from('m').to('km');
-  let maxDay = Object.keys(metersPerDay).filter(k => metersPerDay[k] === metersPerDay);
+  let maxDay = Object.keys(metersPerDay).filter(k => metersPerDay[k] === maxMetersPerDay);
 
 
   params = {
