@@ -43,9 +43,8 @@ const computeStatsATMap = async (dbTableName, records, itemType = 'at-map-medium
   */
 
   // OVERALL STATS
-  const totalDistance = records.reduce((accum, item) => accum + item.summaryStats.distanceTotal, 0);
-  const totalDurationMinutes = records.reduce((accum, item) => accum + item.summaryStats.duration, 0);
-  const totalDurationHours = moment.duration(totalDurationMinutes, 'minutes').asHours();
+  const totalDistance = convert(records.reduce((accum, item) => accum + item.summaryStats.distanceTotal, 0)).from('m').to('km');
+  const totalDurationHours = convert(records.reduce((accum, item) => accum + item.summaryStats.duration, 0)).from('min').to('h');
   const paceSum = records.reduce((accum, item) => accum + item.summaryStats.paceAverage, 0);
   const speedSum = records.reduce((accum, item) => accum + item.summaryStats.speedAverage, 0);
   const totalHikeCount = records.reduce((accum, item) => accum + 1, 0);
@@ -82,8 +81,7 @@ const computeStatsATMap = async (dbTableName, records, itemType = 'at-map-medium
     Item: {
       'h': 'stat',
       'r': 'overall',
-      'totalDistanceMeters': totalDistance,
-      'totalDurationMinutes': totalDurationMinutes,
+      'totalDistanceKm': totalDistance,
       'totalDurationHours': totalDurationHours,
       'AveragePaceMinutesPerKilometer': averagePace,
       'AverageSpeedKilometersPerHour': averageSpeed,
@@ -105,7 +103,7 @@ const computeStatsATMap = async (dbTableName, records, itemType = 'at-map-medium
     if (err) {
       console.log(`stats Error in put ${JSON.stringify(err)}`);
     } else {
-      // console.log("Success", data);
+      console.log("Stats put successfully", data);
     }
   });
 };
