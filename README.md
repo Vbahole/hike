@@ -8,7 +8,8 @@ an app to compile gpx tracks and store them for stats.
 - uses gpxparser - <https://github.com/Luuka/GPXParser.js> to read gpx, get distance and time from start end points
 - cannot get moving time and have to export all recordings manually
 
-## AllTrails request version (at-map) - Upload results of All Trails 'map' xhr request jacked via dev tools
+## AllTrails request version (at-map)
+Upload results of All Trails 'map' xhr request jacked via dev tools
 <https://www.alltrails.com/api/alltrails/my/maps?presentation_type=track&detail=medium>
 pick and choose which fields from the raw response to push to dynamo
 
