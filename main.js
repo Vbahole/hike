@@ -1,26 +1,12 @@
 let appRoot = require('app-root-path');
-let {
-  importGpx
-} = require(`${appRoot}/utils/import`);
-let {
-  importATmap
-} = require(`${appRoot}/utils/import-at-map`);
-let {
-  computeStats
-} = require(`${appRoot}/utils/stats`);
-let {
-  computeStatsATMap
-} = require(`${appRoot}/utils/stats-at-map`);
+let { importGpx } = require(`${appRoot}/utils/import`);
+let { importATmap } = require(`${appRoot}/utils/import-at-map`);
+let { computeStats } = require(`${appRoot}/utils/stats`);
+let { computeStatsATMap } = require(`${appRoot}/utils/stats-at-map`);
 let pull = require(`${appRoot}/utils/pull`);
-let {
-  putToDynamo
-} = require(`${appRoot}/utils/put`);
-let {
-  purgeItems
-} = require(`${appRoot}/utils/purge`);
-let {
-  testIt
-} = require(`${appRoot}/utils/test`);
+let { putToDynamo } = require(`${appRoot}/utils/put`);
+let { purgeItems } = require(`${appRoot}/utils/purge`);
+let { testIt } = require(`${appRoot}/utils/test`);
 let {
   consolidate,
   transformRaw,
@@ -32,7 +18,6 @@ const gpxSourceDir = `${appRoot}/gpx/exports`;
 const atmapSourceFile = `${appRoot}/stubs/at-track-medium.json`;
 const dbTableName = 'hike';
 
-// purge
 (async () => {
 
   // testIt();
@@ -43,6 +28,7 @@ const dbTableName = 'hike';
   await purgeItems(dbTableName, 'consolidate');
   await purgeItems(dbTableName, 'at-map-medium');
 
+  // IMPORT
   let mapsObject = importATmap(atmapSourceFile);
   // console.log(`got a mapsObject - ${ mapsObject }`);
   // console.dir(mapsObject);

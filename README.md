@@ -1,8 +1,19 @@
 # hike
 
-an app to compile gpx tracks and store them for stats.
+an app to compile and store All Trails hike recordings and generate statistics.
 
-`nodemon main.js`
+# run it
+replace stubs/at-track-medium.json with the latest All Trails map request capture
+run it through JSONLint <https://jsonlint.com/> first to clean it up
+then `nodemon main.js`
+check the hike table in dynamo
+options
+---------
+- source to import from
+- push all recordings to DynamoDB
+- compute overall stats
+- consolidate for daily stats
+
 
 ## AllTrails recording exports in gpx formula
 - uses gpxparser - <https://github.com/Luuka/GPXParser.js> to read gpx, get distance and time from start end points
