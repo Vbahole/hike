@@ -27,8 +27,6 @@ const dbTableName = 'hike';
   // TRANSFORM - modify/select fields
   let transformedATMapRecords = await transformATMAp(mapsObject);
 
-  // CONSOLIDATE - collpase multi-hikes by day combined stats, points array for each day
-
   // STATS
   await computeStatsATMap(dbTableName, transformedATMapRecords);
   return;

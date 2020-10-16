@@ -25,12 +25,10 @@ Upload results of All Trails 'map' xhr request jacked via dev tools
 <https://www.alltrails.com/api/alltrails/my/maps?presentation_type=track&detail=medium>
 pick and choose which fields from the raw response to push to dynamo
 
-After the import, code works the same for both (based on consolidation choices)
+After the import, code works the same for both
 
-## To Consolidate?
-a) throw all of the raw recording data into dynamo
-and/or
-b) collapse multi hikes by day to get a daily tally/stats for multi-hike days
+## Daily Consolidation - collapse by day
+a reduce function in stats takes care of this
 
 ## Main Steps
 -   import - from at-map or directory of gpx AT file exports

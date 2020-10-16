@@ -1,6 +1,7 @@
 const AWS = require('aws-sdk');
 const moment = require('moment');
 const convert = require('convert-units');
+const roundTo = require('round-to');
 
 // AWS
 AWS.config.update({
@@ -43,13 +44,13 @@ const computeStatsATMap = async (dbTableName, records, itemType = 'at-map-medium
   */
 
   // OVERALL STATS
-  const totalDistance = convert(records.reduce((accum, item) => accum + item.summaryStats.distanceTotal, 0)).from('m').to('km');
-  const totalDurationHours = convert(records.reduce((accum, item) => accum + item.summaryStats.duration, 0)).from('min').to('h');
+  const totalDistance = roundTo(convert(records.reduce((accum, item) => accum + item.summaryStats.distanceTotal, 0)).from('m').to('km'), 2);
+  const totalDurationHours = roundTo(convert(records.reduce((accum, item) => accum + item.summaryStats.duration, 0)).from('min').to('h'), 2);
   const paceSum = records.reduce((accum, item) => accum + item.summaryStats.paceAverage, 0);
   const speedSum = records.reduce((accum, item) => accum + item.summaryStats.speedAverage, 0);
   const totalHikeCount = records.reduce((accum, item) => accum + 1, 0);
-  const averagePace = convert(paceSum / totalHikeCount).from('s/m').to('min/km');
-  const averageSpeed = convert(speedSum / totalHikeCount).from('m/s').to('km/h');
+  const averagePace = roundTo(convert(paceSum / totalHikeCount).from('s/m').to('min/km'), 2);
+  const averageSpeed = roundTo(convert(speedSum / totalHikeCount).from('m/s').to('km/h'), 2);
 
   const hikesPerDay = records.reduce(function(accum, item) {
     let iDate = moment(item.r).format('MM/DD/YYYY');
@@ -63,18 +64,21 @@ const computeStatsATMap = async (dbTableName, records, itemType = 'at-map-medium
     "09/05/2020": 3
   }
   */
+
+  // most hikes in one day
   let maxHikeCount = Math.max(...Object.values(hikesPerDay));
   let maxHikeDays = Object.keys(hikesPerDay).filter(k => hikesPerDay[k] === maxHikeCount);
 
+  // most kms hiked in any one day
   const metersPerDay = records.reduce(function(accum, item) {
     let iDate = moment(item.r).format('MM/DD/YYYY');
     accum[iDate] = (accum[iDate] || 0) + item.summaryStats.distanceTotal;
     return accum;
   }, {});
 
-  let maxMetersPerDay = Math.max(...Object.values(metersPerDay));
-  let maxDay = Object.keys(metersPerDay).filter(k => metersPerDay[k] === maxMetersPerDay);
-  let maxKmPerDay = convert(maxMetersPerDay).from('m').to('km');
+  let maxKmPerDay = convert(Math.max(...Object.values(metersPerDay))).from('m').to('km');
+  let maxDay = Object.keys(metersPerDay).filter(k => metersPerDay[k] === metersPerDay);
+
 
   params = {
     TableName: dbTableName,

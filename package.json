@@ -15,7 +15,8 @@
     "convert-units": "2.3.4",
     "moment": "2.27.0",
     "aws-sdk": "2.734.0",
-    "gpxparser": "^3.0.6"
+    "gpxparser": "^3.0.6",
+    "round-to": "4.1.0"
   },
   "devDependencies": {},
   "author": "",
