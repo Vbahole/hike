@@ -21,9 +21,9 @@ const purgeItems = async (dbTableName, term) => {
     TableName: dbTableName
   };
 
-  gpxRecords = await docClient.query(params).promise();
-  console.log(`anything to purge? - ${gpxRecords.Items.length}`);
-  for (const item of gpxRecords.Items) {
+  result = await docClient.query(params).promise();
+  console.log(`anything to purge? - ${result.Items.length}`);
+  for (const item of result.Items) {
     params = {
       Key: {
         'h': item.h,
@@ -35,7 +35,7 @@ const purgeItems = async (dbTableName, term) => {
       if (err) console.log(err);
     });
   };
-  console.log(`done purging`);
+  console.log(`done purging- "${term}"`);
 };
 
 exports.purgeItems = purgeItems;

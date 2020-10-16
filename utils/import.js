@@ -1,9 +1,9 @@
 // pump - read gpx from directory, parse, calc a few things, return records
-let fs = require('fs');
-let path = require('path');
-let gpxParser = require('gpxparser');
-let convert = require('convert-units');
-let moment = require('moment');
+const fs = require('fs');
+const path = require('path');
+const gpxParser = require('gpxparser');
+const convert = require('convert-units');
+const moment = require('moment');
 
 let parser;
 

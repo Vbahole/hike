@@ -1,12 +1,7 @@
-// pump - read at-map api endpoint results from file, return records
-let fs = require('fs');
-let path = require('path');
+const fs = require('fs');
 
-// (source directory for at-map endpoint json file, limit to n recs to speed up dev)
-const importATmap = (atmapSourceFile, importPoints = true, limit) => {
-  // TODO:: get limit in the mix
-  const m = fs.readFileSync(atmapSourceFile);
-  const mapsObject = JSON.parse(m);
+const importATmap = (atmapSourceFile, limit) => {
+  const mapsObject = JSON.parse(fs.readFileSync(atmapSourceFile));
   console.log(`IMPORTING ${mapsObject.maps.length} map records from at-map at ${atmapSourceFile}`);
   return mapsObject.maps;
 };
