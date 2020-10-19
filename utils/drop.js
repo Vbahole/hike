@@ -1,5 +1,5 @@
 // send parsed gpx to dynamodb
-let AWS = require("aws-sdk");
+const AWS = require('aws-sdk');
 
 // AWS
 AWS.config.update({
@@ -16,16 +16,16 @@ const dropDynamo = (dbTableName) => {
   console.log(`dropping dynamo table ${dbTableName}`);
 
   var params = {
-      TableName : dbTableName
+    TableName: dbTableName
   };
 
   dynamodb.deleteTable(params, function(err, data) {
-      if (err) {
-          console.error("Unable to delete table. Error JSON:", JSON.stringify(err, null, 2));
-      } else {
-          console.log("Deleted table. Table description JSON:", JSON.stringify(data, null, 2));
-      }
+    if (err) {
+      console.error("Unable to delete table. Error JSON:", JSON.stringify(err, null, 2));
+    } else {
+      console.log("Deleted table. Table description JSON:", JSON.stringify(data, null, 2));
+    }
   });
-  };
+};
 
-exports dropDynamo = dropDynamo;
+exports.dropDynamo = dropDynamo;

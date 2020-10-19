@@ -52,7 +52,7 @@ const computeStatsATMap = async (dbTableName, records, itemType = 'at-map-medium
   const averagePace = roundTo(convert(paceSum / totalHikeCount).from('s/m').to('min/km'), 2);
   const averageSpeed = roundTo(convert(speedSum / totalHikeCount).from('m/s').to('km/h'), 2);
 
-  const hikesPerDay = records.reduce(function(accum, item) {
+  const hikesPerDay = records.reduce(function( accum, item ) {
     const iDate = moment(item.r).format('MM/DD/YYYY');
     accum[iDate] = (accum[iDate] || 0) + 1;
     return accum;
@@ -70,7 +70,7 @@ const computeStatsATMap = async (dbTableName, records, itemType = 'at-map-medium
   const maxHikeDays = Object.keys(hikesPerDay).filter(k => hikesPerDay[k] === maxHikeCount);
 
   // most kms hiked in any one day
-  const metersPerDay = records.reduce(function(accum, item) {
+  const metersPerDay = records.reduce(function( accum, item ) {
     const iDate = moment(item.r).format('MM/DD/YYYY');
     accum[iDate] = (accum[iDate] || 0) + item.summaryStats.distanceTotal;
     return accum;

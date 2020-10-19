@@ -1,25 +1,23 @@
 const fs = require('fs');
 const appRoot = require('app-root-path');
-const path = require('path');
-const AWS = require("aws-sdk");
+// const path = require('path');
+const AWS = require('aws-sdk');
 const util = require('util');
 // var log_file = fs.createWriteStream(__dirname + '/debug.log', {flags : 'w'});
-var log_file = fs.createWriteStream(`${appRoot}/logs/debug.log`, {
+var logFile = fs.createWriteStream(`${appRoot}/logs/debug.log`, {
   flags: 'w'
 });
-var log_stdout = process.stdout;
+var logStdout = process.stdout;
 
-console.log = function(d) { //
-  log_file.write(util.format(d) + '\n');
-  log_stdout.write(util.format(d) + '\n');
+console.log = function( d ) { //
+  logFile.write(util.format(d) + '\n');
+  logStdout.write(util.format(d) + '\n');
 };
 
 AWS.config.update({
   region: 'us-east-1'
 });
-var docClient = new AWS.DynamoDB.DocumentClient ({
-  apiVersion: '2012-08-10'
-});
+var docClient = new AWS.DynamoDB.DocumentClient ({ apiVersion: '2012-08-10' });
 const dbTableName = 'hike';
 
 async function pull() {
@@ -29,9 +27,9 @@ async function pull() {
 
   docClient.scan(params, function(err, data) {
     if (err) {
-      console.log('Error', err);
+      console.log( 'Error', err );
     } else {
-      let result = data.Items.map(({
+      const result = data.Items.map(({
         points,
         ...rest
       }) => rest); // remove track

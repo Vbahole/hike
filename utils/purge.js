@@ -1,5 +1,5 @@
 const AWS = require('aws-sdk');
-const moment = require('moment');
+// const moment = require('moment');
 
 // AWS
 AWS.config.update({
@@ -21,7 +21,7 @@ const purgeItems = async (dbTableName, term) => {
     TableName: dbTableName
   };
 
-  let result = await docClient.query(params).promise();
+  const result = await docClient.query(params).promise();
   console.log(`anything to purge? - ${result.Items.length}`);
   for (const item of result.Items) {
     params = {
@@ -31,7 +31,7 @@ const purgeItems = async (dbTableName, term) => {
       },
       TableName: dbTableName
     };
-    docClient.delete(params, function( err, data ) {
+    docClient.delete( params, function(err, data) {
       if (err) console.log(err);
     });
   };

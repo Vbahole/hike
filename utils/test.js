@@ -5,9 +5,7 @@ const moment = require('moment');
 AWS.config.update({
   region: 'us-east-1'
 });
-var docClient = new AWS.DynamoDB.DocumentClient({
-  apiVersion: '2012-08-10'
-});
+// var docClient = new AWS.DynamoDB.DocumentClient({ apiVersion: '2012-08-10'});
 
 const testIt = () => {
   console.log(`testing`);
@@ -27,34 +25,34 @@ const testIt = () => {
   console.log(`t is this ${t}`);
 
   const cars = [{
-      make: 'audi',
-      model: 'r8',
-      year: '2012'
+    make: 'audi',
+    model: 'r8',
+    year: '2012'
     },
     {
-      make: 'audi',
-      model: 'rs5',
-      year: '2013'
+    make: 'audi',
+    model: 'rs5',
+    year: '2013'
     },
     {
-      make: 'ford',
-      model: 'mustang',
-      year: '2012'
+    make: 'ford',
+    model: 'mustang',
+    year: '2012'
     },
     {
-      make: 'ford',
-      model: 'fusion',
-      year: '2015'
+    make: 'ford',
+    model: 'fusion',
+    year: '2015'
     },
     {
-      make: 'kia',
-      model: 'optima',
-      year: '2012'
+    make: 'kia',
+    model: 'optima',
+    year: '2012'
     }
   ];
   const result = cars.reduce(function( r, a ) {
     r[a.make] = r[a.make] || [];
-    r[a.make].push(a);
+    r[a.make].push( a );
     return r;
   }, {});
   console.log(result);
