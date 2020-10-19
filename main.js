@@ -14,6 +14,7 @@ const dbTableName = 'hike';
 
   // testIt();
   // return;
+  
 
   // PURGE
   await purgeItems(dbTableName, 'recording');
