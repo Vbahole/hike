@@ -8,7 +8,7 @@ AWS.config.update({
 // var docClient = new AWS.DynamoDB.DocumentClient({ apiVersion: '2012-08-10'})
 
 const testIt = () => {
-  console.log(`testing`)
+  console.log('testing')
   const w = moment().week()
   console.log(`what week is this ${w}`)
   const fw = moment().startOf('week')
@@ -18,7 +18,7 @@ const testIt = () => {
   const startOfAWeek = moment().week(34).startOf('week')
   const endOfAWeek = moment().week(34).endOf('week')
   console.log(`aWeek is ${startOfAWeek} thru ${endOfAWeek}`)
-  //		7/15/2020
+  // 7/15/2020
   const t = moment('7/15/2020', 'MM/DD/YYYY').week()
   // get rid of warning message by hinting with a format string
   // moment("12-25-1995", "MM-DD-YYYY")
@@ -28,31 +28,31 @@ const testIt = () => {
     make: 'audi',
     model: 'r8',
     year: '2012'
-    },
-    {
+  },
+  {
     make: 'audi',
     model: 'rs5',
     year: '2013'
-    },
-    {
+  },
+  {
     make: 'ford',
     model: 'mustang',
     year: '2012'
-    },
-    {
+  },
+  {
     make: 'ford',
     model: 'fusion',
     year: '2015'
-    },
-    {
+  },
+  {
     make: 'kia',
     model: 'optima',
     year: '2012'
-    }
+  }
   ]
-  const result = cars.reduce(function( r, a ) {
+  const result = cars.reduce(function (r, a) {
     r[a.make] = r[a.make] || []
-    r[a.make].push( a )
+    r[a.make].push(a)
     return r
   }, {})
   console.log(result)

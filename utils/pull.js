@@ -9,7 +9,7 @@ var logFile = fs.createWriteStream(`${appRoot}/logs/debug.log`, {
 })
 var logStdout = process.stdout
 
-console.log = function( d ) { //
+console.log = function (d) { //
   logFile.write(util.format(d) + '\n')
   logStdout.write(util.format(d) + '\n')
 }
@@ -20,14 +20,14 @@ AWS.config.update({
 var docClient = new AWS.DynamoDB.DocumentClient ({ apiVersion: '2012-08-10' })
 const dbTableName = 'hike'
 
-async function pull() {
+async function pull () {
   const params = {
     TableName: dbTableName
   }
 
-  docClient.scan(params, function(err, data) {
+  docClient.scan (params, function(err, data) {
     if (err) {
-      console.log( 'Error', err )
+      console.log('Error', err)
     } else {
       const result = data.Items.map(({
         points,

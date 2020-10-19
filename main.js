@@ -11,9 +11,6 @@ const atmapSourceFile = `${appRoot}/stubs/at-track-medium.json` // json at-map r
 const dbTableName = 'hike'
 
 (async () => {
-  // testIt()
-  // return
-  // PURGE
   await purgeItems(dbTableName, 'recording')
   await purgeItems(dbTableName, 'consolidate')
   await purgeItems(dbTableName, 'at-map-medium')

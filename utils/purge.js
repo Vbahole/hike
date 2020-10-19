@@ -31,7 +31,7 @@ const purgeItems = async (dbTableName, term) => {
       },
       TableName: dbTableName
     }
-    docClient.delete( params, function(err, data) {
+    docClient.delete(params, function (err, data) {
       if (err) console.log(err)
     })
   }
