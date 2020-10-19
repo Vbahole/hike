@@ -8,7 +8,7 @@ const { purgeItems } = require(`${appRoot}/utils/purge`)
 const { transformATMAp } = require(`${appRoot}/utils/transform`)
 
 const atmapSourceFile = `${appRoot}/stubs/at-track-medium.json` // json at-map response
-const dbTableName = 'hike'
+const dbTableName = 'hike';
 
 (async () => {
   await purgeItems(dbTableName, 'recording')
