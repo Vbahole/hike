@@ -1,28 +1,28 @@
-const AWS = require('aws-sdk');
-const moment = require('moment');
+const AWS = require('aws-sdk')
+const moment = require('moment')
 
 // AWS
 AWS.config.update({
   region: 'us-east-1'
-});
-// var docClient = new AWS.DynamoDB.DocumentClient({ apiVersion: '2012-08-10'});
+})
+// var docClient = new AWS.DynamoDB.DocumentClient({ apiVersion: '2012-08-10'})
 
 const testIt = () => {
-  console.log(`testing`);
-  const w = moment().week();
-  console.log(`what week is this ${w}`);
-  const fw = moment().startOf('week');
-  console.log(`start of week is this ${fw}`);
-  const aWeek = moment().week(35);
-  console.log(`aWeek is this ${aWeek}`);
-  const startOfAWeek = moment().week(34).startOf('week');
-  const endOfAWeek = moment().week(34).endOf('week');
-  console.log(`aWeek is ${startOfAWeek} thru ${endOfAWeek}`);
+  console.log(`testing`)
+  const w = moment().week()
+  console.log(`what week is this ${w}`)
+  const fw = moment().startOf('week')
+  console.log(`start of week is this ${fw}`)
+  const aWeek = moment().week(35)
+  console.log(`aWeek is this ${aWeek}`)
+  const startOfAWeek = moment().week(34).startOf('week')
+  const endOfAWeek = moment().week(34).endOf('week')
+  console.log(`aWeek is ${startOfAWeek} thru ${endOfAWeek}`)
   //		7/15/2020
-  const t = moment('7/15/2020', 'MM/DD/YYYY').week();
+  const t = moment('7/15/2020', 'MM/DD/YYYY').week()
   // get rid of warning message by hinting with a format string
-  // moment("12-25-1995", "MM-DD-YYYY");
-  console.log(`t is this ${t}`);
+  // moment("12-25-1995", "MM-DD-YYYY")
+  console.log(`t is this ${t}`)
 
   const cars = [{
     make: 'audi',
@@ -49,13 +49,13 @@ const testIt = () => {
     model: 'optima',
     year: '2012'
     }
-  ];
+  ]
   const result = cars.reduce(function( r, a ) {
-    r[a.make] = r[a.make] || [];
-    r[a.make].push( a );
-    return r;
-  }, {});
-  console.log(result);
+    r[a.make] = r[a.make] || []
+    r[a.make].push( a )
+    return r
+  }, {})
+  console.log(result)
 
   /*
     // PUT
@@ -72,15 +72,15 @@ const testIt = () => {
          "h": "recording",
          "r": "Fri Aug 28 2020 21:20:34 GMT-0400"
        }
-      };
-    console.log(`putting------- ${JSON.stringify(params, null, 2)} \n`);
+      }
+    console.log(`putting------- ${JSON.stringify(params, null, 2)} \n`)
     docClient.put(params, function(err, data) {
       if (err) {
         console.log(`PUT error - ${JSON.stringify(err)} \n`)
       } else {
-        console.log('it worked');
+        console.log('it worked')
       }
-    });
+    })
   */
 
   // DELETE
@@ -91,14 +91,14 @@ const testIt = () => {
         'r': '7/15/2020'
       },
       TableName: 'hike'
-    };
-    console.log(`test! - ${JSON.stringify(params, null, 2)}`);
-    // let res = docClient.delete(params);
+    }
+    console.log(`test! - ${JSON.stringify(params, null, 2)}`)
+    // let res = docClient.delete(params)
     docClient.delete(params, function(err, data) {
-      if (err) console.log(err);
-      else console.log(data);
-    });
+      if (err) console.log(err)
+      else console.log(data)
+    })
     */
-};
+}
 
-exports.testIt = testIt;
+exports.testIt = testIt

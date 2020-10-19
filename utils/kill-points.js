@@ -1,4 +1,4 @@
 function kill( data ) {
-  return data.Items.map(({ points, ...rest }) => rest);
+  return data.Items.map(({ points, ...rest }) => rest)
 }
-exports.kill = kill;
+exports.kill = kill

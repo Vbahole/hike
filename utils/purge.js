@@ -1,17 +1,17 @@
-const AWS = require('aws-sdk');
-// const moment = require('moment');
+const AWS = require('aws-sdk')
+// const moment = require('moment')
 
 // AWS
 AWS.config.update({
   region: 'us-east-1'
-});
+})
 var docClient = new AWS.DynamoDB.DocumentClient({
   apiVersion: '2012-08-10'
-});
+})
 
 // (dynamo table name, term to select on)
 const purgeItems = async (dbTableName, term) => {
-  console.log(`purging all - "${term}"`);
+  console.log(`purging all - "${term}"`)
 
   let params = {
     ExpressionAttributeValues: {
@@ -19,10 +19,10 @@ const purgeItems = async (dbTableName, term) => {
     },
     KeyConditionExpression: 'h = :s',
     TableName: dbTableName
-  };
+  }
 
-  const result = await docClient.query(params).promise();
-  console.log(`anything to purge? - ${result.Items.length}`);
+  const result = await docClient.query(params).promise()
+  console.log(`anything to purge? - ${result.Items.length}`)
   for (const item of result.Items) {
     params = {
       Key: {
@@ -30,12 +30,12 @@ const purgeItems = async (dbTableName, term) => {
         r: item.r
       },
       TableName: dbTableName
-    };
+    }
     docClient.delete( params, function(err, data) {
-      if (err) console.log(err);
-    });
-  };
-  console.log(`done purging- "${term}"`);
-};
+      if (err) console.log(err)
+    })
+  }
+  console.log(`done purging- "${term}"`)
+}
 
-exports.purgeItems = purgeItems;
+exports.purgeItems = purgeItems

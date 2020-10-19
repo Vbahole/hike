@@ -1,15 +1,15 @@
-const AWS = require('aws-sdk');
-const moment = require('moment');
-const convert = require('convert-units');
-const roundTo = require('round-to');
+const AWS = require('aws-sdk')
+const moment = require('moment')
+const convert = require('convert-units')
+const roundTo = require('round-to')
 
 // AWS
 AWS.config.update({
   region: 'us-east-1'
-});
+})
 var docClient = new AWS.DynamoDB.DocumentClient({
   apiVersion: '2012-08-10'
-});
+})
 
 // (dynamo table name, optionally a map record set from at-map, or will pull 'at-map-medium' from aws)
 const computeStatsATMap = async (dbTableName, records, itemType = 'at-map-medium') => {
@@ -19,13 +19,13 @@ const computeStatsATMap = async (dbTableName, records, itemType = 'at-map-medium
     },
     KeyConditionExpression: 'h = :s',
     TableName: dbTableName
-  };
+  }
 
   if (!records) {
-    records = await docClient.query(params).promise();
-    records = records.Items;
+    records = await docClient.query(params).promise()
+    records = records.Items
   }
-  console.log(`STATS computing for ${records.length} map objects \n`);
+  console.log(`STATS computing for ${records.length} map objects \n`)
 
   // sample summaryStats from AT
   /*
@@ -44,19 +44,19 @@ const computeStatsATMap = async (dbTableName, records, itemType = 'at-map-medium
   */
 
   // OVERALL STATS
-  const totalDistance = roundTo(convert(records.reduce((accum, item) => accum + item.summaryStats.distanceTotal, 0)).from('m').to('km'), 2);
-  const totalDurationHours = roundTo(convert(records.reduce((accum, item) => accum + item.summaryStats.duration, 0)).from('min').to('h'), 2);
-  const paceSum = records.reduce((accum, item) => accum + item.summaryStats.paceAverage, 0);
-  const speedSum = records.reduce((accum, item) => accum + item.summaryStats.speedAverage, 0);
-  const totalHikeCount = records.reduce((accum, item) => accum + 1, 0);
-  const averagePace = roundTo(convert(paceSum / totalHikeCount).from('s/m').to('min/km'), 2);
-  const averageSpeed = roundTo(convert(speedSum / totalHikeCount).from('m/s').to('km/h'), 2);
+  const totalDistance = roundTo(convert(records.reduce((accum, item) => accum + item.summaryStats.distanceTotal, 0)).from('m').to('km'), 2)
+  const totalDurationHours = roundTo(convert(records.reduce((accum, item) => accum + item.summaryStats.duration, 0)).from('min').to('h'), 2)
+  const paceSum = records.reduce((accum, item) => accum + item.summaryStats.paceAverage, 0)
+  const speedSum = records.reduce((accum, item) => accum + item.summaryStats.speedAverage, 0)
+  const totalHikeCount = records.reduce((accum, item) => accum + 1, 0)
+  const averagePace = roundTo(convert(paceSum / totalHikeCount).from('s/m').to('min/km'), 2)
+  const averageSpeed = roundTo(convert(speedSum / totalHikeCount).from('m/s').to('km/h'), 2)
 
   const hikesPerDay = records.reduce(function( accum, item ) {
-    const iDate = moment(item.r).format('MM/DD/YYYY');
-    accum[iDate] = (accum[iDate] || 0) + 1;
-    return accum;
-  }, {});
+    const iDate = moment(item.r).format('MM/DD/YYYY')
+    accum[iDate] = (accum[iDate] || 0) + 1
+    return accum
+  }, {})
   /*
   hikesPerDay - {
     "09/08/2020": 2,
@@ -66,19 +66,19 @@ const computeStatsATMap = async (dbTableName, records, itemType = 'at-map-medium
   */
 
   // most hikes in one day
-  const maxHikeCount = Math.max(...Object.values(hikesPerDay));
-  const maxHikeDays = Object.keys(hikesPerDay).filter(k => hikesPerDay[k] === maxHikeCount);
+  const maxHikeCount = Math.max(...Object.values(hikesPerDay))
+  const maxHikeDays = Object.keys(hikesPerDay).filter(k => hikesPerDay[k] === maxHikeCount)
 
   // most kms hiked in any one day
   const metersPerDay = records.reduce(function( accum, item ) {
-    const iDate = moment(item.r).format('MM/DD/YYYY');
-    accum[iDate] = (accum[iDate] || 0) + item.summaryStats.distanceTotal;
-    return accum;
-  }, {});
+    const iDate = moment(item.r).format('MM/DD/YYYY')
+    accum[iDate] = (accum[iDate] || 0) + item.summaryStats.distanceTotal
+    return accum
+  }, {})
 
-  const maxMetersPerDay = Math.max(...Object.values(metersPerDay));
-  const maxKmPerDay = convert(Math.max(...Object.values(metersPerDay))).from('m').to('km');
-  const maxDay = Object.keys(metersPerDay).filter(k => metersPerDay[k] === maxMetersPerDay);
+  const maxMetersPerDay = Math.max(...Object.values(metersPerDay))
+  const maxKmPerDay = convert(Math.max(...Object.values(metersPerDay))).from('m').to('km')
+  const maxDay = Object.keys(metersPerDay).filter(k => metersPerDay[k] === maxMetersPerDay)
 
   params = {
     TableName: dbTableName,
@@ -99,15 +99,15 @@ const computeStatsATMap = async (dbTableName, records, itemType = 'at-map-medium
         date: maxDay
       }
     }
-  };
+  }
 
-  console.log(`stats overall put params ${JSON.stringify(params)}`);
+  console.log(`stats overall put params ${JSON.stringify(params)}`)
 
   docClient.put(params, function( err, data ) {
     if (err) {
-      console.log(`stats Error in put ${JSON.stringify(err)}`);
+      console.log(`stats Error in put ${JSON.stringify(err)}`)
     } else {}
-  });
-};
+  })
+}
 
-exports.computeStatsATMap = computeStatsATMap;
+exports.computeStatsATMap = computeStatsATMap
