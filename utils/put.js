@@ -1,5 +1,5 @@
 // send parsed gpx to dynamodb
-let AWS = require("aws-sdk");
+const AWS = require('aws-sdk');
 
 // AWS
 AWS.config.update({
@@ -10,12 +10,12 @@ var docClient = new AWS.DynamoDB.DocumentClient({
 });
 
 const thePut = async (i, dbTableName) => {
-  let params = {
+  const params = {
     TableName: dbTableName,
     Item: i
   };
   // console.log(`putting------- ${JSON.stringify(params, null, 2)} \n`);
-  docClient.put(params, function(err, data) {
+  docClient.put(params, function( err, data ) {
     if (err) {
       console.log(`PUT error - ${JSON.stringify(err)} \n`)
     } else {

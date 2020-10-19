@@ -1,11 +1,11 @@
-let appRoot = require('app-root-path');
-let { importATmap } = require(`${appRoot}/utils/import-at-map`);
-let { computeStatsATMap } = require(`${appRoot}/utils/stats-at-map`);
-let pull = require(`${appRoot}/utils/pull`);
-let { putToDynamo } = require(`${appRoot}/utils/put`);
-let { purgeItems } = require(`${appRoot}/utils/purge`);
-let { testIt } = require(`${appRoot}/utils/test`);
-let { transformATMAp } = require(`${appRoot}/utils/transform`);
+const appRoot = require('app-root-path');
+const { importATmap } = require(`${appRoot}/utils/import-at-map`);
+const { computeStatsATMap } = require(`${appRoot}/utils/stats-at-map`);
+const pull = require(`${appRoot}/utils/pull`);
+const { putToDynamo } = require(`${appRoot}/utils/put`);
+const { purgeItems } = require(`${appRoot}/utils/purge`);
+const { testIt } = require(`${appRoot}/utils/test`);
+const { transformATMAp } = require(`${appRoot}/utils/transform`);
 
 const atmapSourceFile = `${appRoot}/stubs/at-track-medium.json`; // json at-map response
 const dbTableName = 'hike';
@@ -22,17 +22,16 @@ const dbTableName = 'hike';
   await purgeItems(dbTableName, 'stat');
 
   // IMPORT - place an all trails export at stubs/at-track-medium.json
-  let mapsObject = importATmap(atmapSourceFile);
+  const mapsObject = importATmap(atmapSourceFile);
 
   // TRANSFORM - modify/select fields
-  let transformedATMapRecords = await transformATMAp(mapsObject);
+  const transformedATMapRecords = await transformATMAp(mapsObject);
 
   // STATS
   await computeStatsATMap(dbTableName, transformedATMapRecords);
 
   // PUT
   await putToDynamo(dbTableName, transformedATMapRecords);
-
 })().catch(e => {
   console.error(`HEY - got an error yo - ${e}`);
-});
+})

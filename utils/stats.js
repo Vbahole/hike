@@ -1,5 +1,5 @@
-let AWS = require('aws-sdk');
-let moment = require('moment');
+const AWS = require('aws-sdk');
+const moment = require('moment');
 
 // AWS
 AWS.config.update({
@@ -38,14 +38,14 @@ const computeStats = async (dbTableName, gpxRecords, itemType = 'consolidate') =
     (accum.totalDistanceMiles || 0) > item.totalDistanceMiles ? accum : item, {});
 
   // const hikesInAugust = gpxRecords.filter(i => i.r == '8/11/2020');
-  const hikesInAugust = gpxRecords.filter(function(i) {
+  const hikesInAugust = gpxRecords.filter( function(i) {
     console.log(`what week is it - ${moment(i.r).week()}`);
     return i.r === '8/11/2020';
   });
   // console.log(`any august - ${JSON.stringify(hikesInAugust)}`);
 
   const byWeeks = gpxRecords.reduce(function(accum, item) {
-    let w = moment(item.r, 'MM/DD/YYYY').week();
+    const w = moment(item.r, 'MM/DD/YYYY').week();
     accum[w] = accum[w] || [];
     accum[w].push(item);
     return accum;
@@ -58,30 +58,30 @@ const computeStats = async (dbTableName, gpxRecords, itemType = 'consolidate') =
   params = {
     TableName: dbTableName,
     Item: {
-      'h': 'stat',
-      'r': 'overall',
-      'totalDistanceMiles': totalDistance,
-      'totalDurationMinutes': totalDurationMinutes,
-      'totalDurationHours': totalDurationHours,
-      'overallPaceMinutesPerMile': overallPace,
-      'totalHikeCount': totalHikeCount,
-      'mostHikesInOneDay': {
-        'hikes': mostHikesInOneDay.hikeCount,
-        'date': mostHikesInOneDay.r
+      h: 'stat',
+      r: 'overall',
+      totalDistanceMiles: totalDistance,
+      totalDurationMinutes: totalDurationMinutes,
+      totalDurationHours: totalDurationHours,
+      overallPaceMinutesPerMile: overallPace,
+      totalHikeCount: totalHikeCount,
+      mostHikesInOneDay: {
+        hikes: mostHikesInOneDay.hikeCount,
+        date: mostHikesInOneDay.r
       },
-      'mostMilesHikedInOneDay': {
-        'miles': mostMilesHikedInOneDay.totalDistanceMiles,
-        'date': mostMilesHikedInOneDay.r
+      mostMilesHikedInOneDay: {
+        miles: mostMilesHikedInOneDay.totalDistanceMiles,
+        date: mostMilesHikedInOneDay.r
       },
-      'hikesInAugust': {
-        'hike': hikesInAugust[0].r
+      hikesInAugust: {
+        hike: hikesInAugust[0].r
       }
     }
   };
 
   console.log(`stats overall put params ${JSON.stringify(params)}`);
 
-  docClient.put(params, function(err, data) {
+  docClient.put(params, function( err, data ) {
     if (err) {
       console.log(`stats Error in put ${JSON.stringify(err)}`);
     } else {

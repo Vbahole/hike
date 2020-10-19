@@ -1,5 +1,5 @@
-let AWS = require("aws-sdk");
-let moment = require('moment');
+const AWS = require('aws-sdk');
+const moment = require('moment');
 
 // AWS
 AWS.config.update({
@@ -25,7 +25,6 @@ const testIt = () => {
   // get rid of warning message by hinting with a format string
   // moment("12-25-1995", "MM-DD-YYYY");
   console.log(`t is this ${t}`);
-
 
   const cars = [{
       make: 'audi',
@@ -53,7 +52,7 @@ const testIt = () => {
       year: '2012'
     }
   ];
-  const result = cars.reduce(function(r, a) {
+  const result = cars.reduce(function( r, a ) {
     r[a.make] = r[a.make] || [];
     r[a.make].push(a);
     return r;

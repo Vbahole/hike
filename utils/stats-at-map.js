@@ -53,7 +53,7 @@ const computeStatsATMap = async (dbTableName, records, itemType = 'at-map-medium
   const averageSpeed = roundTo(convert(speedSum / totalHikeCount).from('m/s').to('km/h'), 2);
 
   const hikesPerDay = records.reduce(function(accum, item) {
-    let iDate = moment(item.r).format('MM/DD/YYYY');
+    const iDate = moment(item.r).format('MM/DD/YYYY');
     accum[iDate] = (accum[iDate] || 0) + 1;
     return accum;
   }, {});
@@ -66,49 +66,47 @@ const computeStatsATMap = async (dbTableName, records, itemType = 'at-map-medium
   */
 
   // most hikes in one day
-  let maxHikeCount = Math.max(...Object.values(hikesPerDay));
-  let maxHikeDays = Object.keys(hikesPerDay).filter(k => hikesPerDay[k] === maxHikeCount);
+  const maxHikeCount = Math.max(...Object.values(hikesPerDay));
+  const maxHikeDays = Object.keys(hikesPerDay).filter(k => hikesPerDay[k] === maxHikeCount);
 
   // most kms hiked in any one day
   const metersPerDay = records.reduce(function(accum, item) {
-    let iDate = moment(item.r).format('MM/DD/YYYY');
+    const iDate = moment(item.r).format('MM/DD/YYYY');
     accum[iDate] = (accum[iDate] || 0) + item.summaryStats.distanceTotal;
     return accum;
   }, {});
 
-  let maxMetersPerDay = Math.max(...Object.values(metersPerDay));
-  let maxKmPerDay = convert(Math.max(...Object.values(metersPerDay))).from('m').to('km');
-  let maxDay = Object.keys(metersPerDay).filter(k => metersPerDay[k] === maxMetersPerDay);
-
+  const maxMetersPerDay = Math.max(...Object.values(metersPerDay));
+  const maxKmPerDay = convert(Math.max(...Object.values(metersPerDay))).from('m').to('km');
+  const maxDay = Object.keys(metersPerDay).filter(k => metersPerDay[k] === maxMetersPerDay);
 
   params = {
     TableName: dbTableName,
     Item: {
-      'h': 'stat',
-      'r': 'overall',
-      'totalDistanceKm': totalDistance,
-      'totalDurationHours': totalDurationHours,
-      'AveragePaceMinutesPerKilometer': averagePace,
-      'AverageSpeedKilometersPerHour': averageSpeed,
-      'totalHikeCount': totalHikeCount,
-      'mostHikesInOneDay': {
-        'hikes': maxHikeCount,
-        'dates': maxHikeDays
+      h: 'stat',
+      r: 'overall',
+      totalDistanceKm: totalDistance,
+      totalDurationHours: totalDurationHours,
+      AveragePaceMinutesPerKilometer: averagePace,
+      AverageSpeedKilometersPerHour: averageSpeed,
+      totalHikeCount: totalHikeCount,
+      mostHikesInOneDay: {
+        hikes: maxHikeCount,
+        dates: maxHikeDays
       },
-      'mostKmsHikedInOneDay': {
-        'kms': maxKmPerDay,
-        'date': maxDay
+      mostKmsHikedInOneDay: {
+        kms: maxKmPerDay,
+        date: maxDay
       }
     }
   };
 
   console.log(`stats overall put params ${JSON.stringify(params)}`);
 
-  docClient.put(params, function(err, data) {
+  docClient.put(params, function( err, data ) {
     if (err) {
       console.log(`stats Error in put ${JSON.stringify(err)}`);
-    } else {
-    }
+    } else {}
   });
 };
 

@@ -12,9 +12,9 @@ const parse = (filePath, importPoints) => {
   parser.parse(fs.readFileSync(filePath), {
     encoding: 'utf8',
     flag: 'r'
-  }); //parse gpx file from string data
+  }); // parse gpx file from string data
 
-  let r = {};
+  const r = {};
 
   r.date = moment(parser.tracks[0].points[0].time).toString();
   // r.date = moment(parser.tracks[0].points[0].time).format('M/D/YYYY').toString();
@@ -34,7 +34,7 @@ const parse = (filePath, importPoints) => {
 
   // all trails call this total time as opposed to moving time which is typically smaller
   // let duration = moment.utc(moment(lastPointTime).diff(moment(firstPointTime))).format("HH:mm:ss")
-  let duration = moment.duration(r.lastPointTime.diff(r.firstPointTime));
+  const duration = moment.duration(r.lastPointTime.diff(r.firstPointTime));
   r.durationMinutes = duration.asMinutes();
 
   // AllTrails would use moving time for this pace and not total time

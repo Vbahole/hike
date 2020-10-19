@@ -1,8 +1,8 @@
-let fs = require('fs');
-let appRoot = require('app-root-path');
-let path = require('path');
-let AWS = require("aws-sdk");
-var util = require('util');
+const fs = require('fs');
+const appRoot = require('app-root-path');
+const path = require('path');
+const AWS = require("aws-sdk");
+const util = require('util');
 // var log_file = fs.createWriteStream(__dirname + '/debug.log', {flags : 'w'});
 var log_file = fs.createWriteStream(`${appRoot}/logs/debug.log`, {
   flags: 'w'
@@ -17,20 +17,19 @@ console.log = function(d) { //
 AWS.config.update({
   region: 'us-east-1'
 });
-var docClient = new AWS.DynamoDB.DocumentClient({
+var docClient = new AWS.DynamoDB.DocumentClient ({
   apiVersion: '2012-08-10'
 });
 const dbTableName = 'hike';
 
 async function pull() {
-
-  let params = {
+  const params = {
     TableName: dbTableName
   };
 
   docClient.scan(params, function(err, data) {
     if (err) {
-      console.log("Error", err);
+      console.log('Error', err);
     } else {
       let result = data.Items.map(({
         points,

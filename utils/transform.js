@@ -1,5 +1,5 @@
 const rawATMap = async i => {
-  let t = {};
+  const t = {};
   t.h = 'at-map-medium';
   t.r = i.created_at.toString();
   t.summaryStats = i.summaryStats;
