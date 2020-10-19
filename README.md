@@ -1,3 +1,5 @@
+[![GitHub Super-Linter](https://github.com/Vbahole/hike/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/marketplace/actions/super-linter)
+
 # hike
 
 an app to compile and store All Trails hike recordings and generate statistics.
