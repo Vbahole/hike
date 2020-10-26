@@ -17,7 +17,9 @@ console.log = function (d) { //
 AWS.config.update({
   region: 'us-east-1'
 })
-var docClient = new AWS.DynamoDB.DocumentClient ({ apiVersion: '2012-08-10' })
+var docClient = new AWS.DynamoDB.DocumentClient (
+  { apiVersion: '2012-08-10' }
+)
 const dbTableName = 'hike'
 
 async function pull () {
