@@ -85,7 +85,7 @@ const computeStats = async (dbTableName, gpxRecords, itemType = 'consolidate') =
     if (err) {
       console.log(`stats Error in put ${JSON.stringify(err)}`)
     } else {
-      // console.log("Success", data)
+      console.log("Success", data)
     }
   })
 }

@@ -55,6 +55,7 @@ a reduce function in stats takes care of this
 - streaks
 - current week total
 - monthly breakdowns
+- concept of **tours** - long-running segments of times, like a month or two or since i began to meet certain goals
 
 ## issues
 

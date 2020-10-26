@@ -1,3 +1,4 @@
+var hrstart = process.hrtime()
 const appRoot = require('app-root-path')
 const { importATmap } = require(`${appRoot}/utils/import-at-map`)
 const { computeStatsATMap } = require(`${appRoot}/utils/stats-at-map`)
@@ -27,6 +28,9 @@ const dbTableName = 'hike';
 
   // PUT
   await putToDynamo(dbTableName, transformedATMapRecords)
+
+  var hrend = process.hrtime(hrstart)
+  console.info('Execution time (hr): %ds %dms', hrend[0], hrend[1] / 1000000)
 })().catch(e => {
   console.error(`HEY - got an error yo - ${e}`)
 })

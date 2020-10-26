@@ -106,7 +106,9 @@ const computeStatsATMap = async (dbTableName, records, itemType = 'at-map-medium
   docClient.put(params, function (err, data) {
     if (err) {
       console.log(`stats Error in put ${JSON.stringify(err)}`)
-    } else {}
+    } else {
+      console.log("Stats put success")
+    }
   })
 }
 
