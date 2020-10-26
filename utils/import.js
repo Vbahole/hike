@@ -1,36 +1,36 @@
 // pump - read gpx from directory, parse, calc a few things, return records
 const fs = require('fs')
 const path = require('path')
-const gpxParser = require('gpxparser')
+const Gpxparser = require('gpxparser')
 const convert = require('convert-units')
 const moment = require('moment')
 
-let Parser
+let parser
 
 const parse = (filePath, importPoints) => {
-  Parser = new gpxParser()
-  Parser.parse(fs.readFileSync(filePath), {
+  parser = new GpxParser()
+  parser.parse(fs.readFileSync(filePath), {
     encoding: 'utf8',
     flag: 'r'
   }) // parse gpx file from string data
 
   const r = {}
 
-  r.date = moment(Parser.tracks[0].points[0].time).toString()
-  // r.date = moment(Parser.tracks[0].points[0].time).format('M/D/YYYY').toString()
-  r.totalDistanceMeters = Parser.tracks[0].distance.total // IN METERS!!
+  r.date = moment(parser.tracks[0].points[0].time).toString()
+  // r.date = moment(parser.tracks[0].points[0].time).format('M/D/YYYY').toString()
+  r.totalDistanceMeters = parser.tracks[0].distance.total // IN METERS!!
 
   // convert to miles
   r.totalDistanceMiles = convert(r.totalDistanceMeters).from('m').to('mi')
 
-  // console.log(`first point is ${JSON.stringify(Parser.tracks[0].points[0])}`)
-  // console.log(`points.length is ${JSON.stringify(Parser.tracks[0].points.length)}`)
-  // console.log(`last point is ${JSON.stringify(Parser.tracks[0].points[Parser.tracks[0].points.length - 1])}`)
+  // console.log(`first point is ${JSON.stringify(parser.tracks[0].points[0])}`)
+  // console.log(`points.length is ${JSON.stringify(parser.tracks[0].points.length)}`)
+  // console.log(`last point is ${JSON.stringify(parser.tracks[0].points[parser.tracks[0].points.length - 1])}`)
 
-  r.firstPointTime = moment(Parser.tracks[0].points[0].time)
-  r.lastPointTime = moment(Parser.tracks[0].points[Parser.tracks[0].points.length - 1].time)
-  // console.log(`first point time is ${JSON.stringify(Parser.tracks[0].points[0].time)}`)
-  // console.log(`last point time is ${JSON.stringify(Parser.tracks[0].points[Parser.tracks[0].points.length - 1].time)}`)
+  r.firstPointTime = moment(parser.tracks[0].points[0].time)
+  r.lastPointTime = moment(parser.tracks[0].points[parser.tracks[0].points.length - 1].time)
+  // console.log(`first point time is ${JSON.stringify(parser.tracks[0].points[0].time)}`)
+  // console.log(`last point time is ${JSON.stringify(parser.tracks[0].points[parser.tracks[0].points.length - 1].time)}`)
 
   // all trails call this total time as opposed to moving time which is typically smaller
   // let duration = moment.utc(moment(lastPointTime).diff(moment(firstPointTime))).format("HH:mm:ss")
@@ -41,7 +41,7 @@ const parse = (filePath, importPoints) => {
   r.paceMinPerMiles = r.durationMinutes / r.totalDistanceMiles
   if (importPoints) {
     // points is an array to handle multi
-    r.points = [Parser.tracks[0].points]
+    r.points = [parser.tracks[0].points]
   } else {
     r.points = []
   }
