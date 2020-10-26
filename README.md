@@ -2,7 +2,7 @@
 
 an app to compile and store All Trails hike recordings and generate statistics.
 
-# run
+## run
 
 replace stubs/at-track-medium.json with the latest All Trails map request capture  
 run it through JSONLint <https://jsonlint.com/> first to clean it up  
