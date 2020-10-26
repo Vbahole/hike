@@ -38,8 +38,7 @@ const computeStats = async (dbTableName, gpxRecords, itemType = 'consolidate') =
     (accum.totalDistanceMiles || 0) > item.totalDistanceMiles ? accum : item, {})
 
   // const hikesInAugust = gpxRecords.filter(i => i.r == '8/11/2020')
-  const hikesInAugust = gpxRecords.filter (
-    function (i) {
+  const hikesInAugust = gpxRecords.filter (function (i) {
     console.log(`what week is it - ${moment(i.r).week()}`)
     return i.r === '8/11/2020'
   })
@@ -86,7 +85,7 @@ const computeStats = async (dbTableName, gpxRecords, itemType = 'consolidate') =
     if (err) {
       console.log(`stats Error in put ${JSON.stringify(err)}`)
     } else {
-      console.log("Success", data)
+      console.log('Success', data)
     }
   })
 }

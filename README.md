@@ -9,8 +9,7 @@ run it through JSONLint <https://jsonlint.com/> first to clean it up
 then `nodemon main.js`  
 check the hike table in dynamo
 
-options
----------
+## options
 - source to import from
 - push all recordings to DynamoDB
 - compute overall stats
