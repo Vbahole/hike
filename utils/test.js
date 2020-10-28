@@ -5,7 +5,7 @@ const moment = require('moment')
 AWS.config.update({
   region: 'us-east-1'
 })
-// var docClient = new AWS.DynamoDB.DocumentClient({ apiVersion: '2012-08-10'})
+var docClient = new AWS.DynamoDB.DocumentClient({ apiVersion: '2012-08-10'})
 
 const testIt = () => {
   console.log('testing')
@@ -56,6 +56,24 @@ const testIt = () => {
     return r
   }, {})
   console.log(result)
+
+    // GET
+    let params = {
+      TableName: 'hike',
+      Key: {
+        'h': 'stat',
+        'r': 'overall'
+        }
+      }
+    console.log(`geting------- ${JSON.stringify(params, null, 2)} \n`)
+    docClient.get(params, function(err, data) {
+      if (err) {
+        console.log(`GET error - ${JSON.stringify(err)} \n`)
+      } else {
+        console.log('it worked')
+      }
+    })
+
 
   /*
     // PUT
