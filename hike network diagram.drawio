@@ -1,4 +1,4 @@
-<mxfile modified="2020-10-28T00:30:08.239Z" host="app.diagrams.net" agent="5.0 (X11; CrOS x86_64 13421.53.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.77 Safari/537.36" etag="yRk6g5dS2_mIeFUTcLJQ" version="13.8.5" type="github" pages="2">
+<mxfile modified="2020-10-28T00:30:40.329Z" host="app.diagrams.net" agent="5.0 (X11; CrOS x86_64 13421.53.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.77 Safari/537.36" etag="k_eR2XAQxftFwo6_VqUG" version="13.8.5" type="github" pages="2">
   <diagram id="Ht1M8jgEwFfnCIfOTk4-" name="v1-no api">
     <mxGraphModel dx="1240" dy="1458" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
@@ -93,9 +93,6 @@
         <mxCell id="SPe5koNAzLoZ7DhRqfml-10" value="" style="aspect=fixed;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;fillColor=#00188D;shape=mxgraph.azure.user" vertex="1" parent="SPe5koNAzLoZ7DhRqfml-1">
           <mxGeometry x="976" y="-751.5" width="47" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="SPe5koNAzLoZ7DhRqfml-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;startFill=1;" edge="1" parent="SPe5koNAzLoZ7DhRqfml-1" source="SPe5koNAzLoZ7DhRqfml-12" target="SPe5koNAzLoZ7DhRqfml-19">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
         <mxCell id="SPe5koNAzLoZ7DhRqfml-12" value="" style="aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;spacingTop=3;image;image=img/lib/active_directory/internet_cloud.svg;" vertex="1" parent="SPe5koNAzLoZ7DhRqfml-1">
           <mxGeometry x="785" y="-745.5" width="79.37" height="50" as="geometry" />
         </mxCell>
@@ -118,6 +115,9 @@
         </mxCell>
         <mxCell id="SPe5koNAzLoZ7DhRqfml-20" value="hike-api-webserver&lt;br&gt;Linux ec2 instance" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.ec2;fillColor=#F58534;gradientColor=none;fontFamily=Verdana;" vertex="1" parent="SPe5koNAzLoZ7DhRqfml-1">
           <mxGeometry x="258" y="-731" width="76.5" height="93" as="geometry" />
+        </mxCell>
+        <mxCell id="SPe5koNAzLoZ7DhRqfml-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;startFill=1;" edge="1" parent="SPe5koNAzLoZ7DhRqfml-1" source="SPe5koNAzLoZ7DhRqfml-12" target="SPe5koNAzLoZ7DhRqfml-19">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
