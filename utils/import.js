@@ -49,7 +49,7 @@ const parse = (filePath, importPoints) => {
 }
 
 // (source directory for gpx files, if true import points, limit to n recs to speed up dev)
-const importGpx = (gpxSourceDir, importPoints = true, limit) => {
+const importGpx = (gpxSourceDir, limit, importPoints = true) => {
   // read all gpx files from source directory
   const files = fs.readdirSync(gpxSourceDir).filter(filename => filename.match(/.*\.(gpx)/ig))
   console.log(`IMPORTING ${files.length} gpx files from ${gpxSourceDir} points = ${importPoints}`)
