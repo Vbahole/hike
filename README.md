@@ -9,7 +9,7 @@ an app to compile and store All Trails hike recordings and generate statistics.
 
 ## run
 
-replace stubs/at-track-medium.json with the latest All Trails map request capture  
+replace stubs/at-track-medium.json with the latest All Trails map request capture. you can export the xhr request as a curl command using dev tools if you need to edit it. Make sure you get type=track and detail=medium. see the curl command in the repo to export to a file.  
 run it through JSONLint <https://jsonlint.com/> first to clean it up  
 then `nodemon main.js`  
 check the hike table in dynamo
