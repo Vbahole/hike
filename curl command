@@ -1,0 +1,19 @@
+curl 'https://www.alltrails.com/api/alltrails/my/maps?presentation_type=track&detail=medium' \
+  -H 'authority: www.alltrails.com' \
+  -H 'pragma: no-cache' \
+  -H 'cache-control: no-cache' \
+  -H 'accept: */*' \
+  -H 'x-newrelic-id: UwAHWVNADAQGU1Nb' \
+  -H 'dnt: 1' \
+  -H 'x-csrf-token: 4xVBS3bry/YlH/8MPe5FWwVO+DzexG98esvKp58wVTAbLyK8Udtz25BsuC8vJrDaY5PcgKZ2IzA2Tb5sMi2z8A==' \
+  -H 'x-requested-with: XMLHttpRequest' \
+  -H 'user-agent: Mozilla/5.0 (X11; CrOS x86_64 13421.99.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36' \
+  -H 'x-at-key: 3p0t5s6b5g4g0e8k3c1j3w7y5c3m4t8i' \
+  -H 'sec-fetch-site: same-origin' \
+  -H 'sec-fetch-mode: cors' \
+  -H 'sec-fetch-dest: empty' \
+  -H 'referer: https://www.alltrails.com/members/k-g-246/recordings?b_tl_lat=38.40571331390862&b_tl_lng=-84.38550971908815&b_br_lat=37.27116039636948&b_br_lng=-72.49315028091011' \
+  -H 'accept-language: en-US,en;q=0.9,und;q=0.8' \
+  -H 'cookie: __utmz=119663758.1597546364.1.1.utmcsr=google|utmccn=(organic)|utmcmd=organic|utmctr=(not%20provided); G_ENABLED_IDPS=google; _fbp=fb.1.1597546365808.1652666047; ab.storage.deviceId.add7d07a-2ace-44bb-86c9-0110078fbb04=%7B%22g%22%3A%221e381ae2-a85d-deed-7342-d38ab15546d4%22%2C%22c%22%3A1597546367452%2C%22l%22%3A1597546367452%7D; ab.storage.userId.add7d07a-2ace-44bb-86c9-0110078fbb04=%7B%22g%22%3A%2226212903%22%2C%22c%22%3A1597546390483%2C%22l%22%3A1597546390483%7D; _ga=GA1.2.1318381463.1597797956; _hjid=ef02333f-d75a-4353-b48e-6c61fbabf05b; at_redirected_lang_amt=1; at_former_lang_code_pre_redirect=en; referrer=BAgiOWh0dHBzOi8vd3d3LmFsbHRyYWlscy5jb20vbWVtYmVycy9rLWctMjQ2L3JlY29yZGluZ3M%3D--0bf23d88b9332490c888eed2a7c6ef18c16a2c7d; at_redirected_lang_msg_shown=true; return_to=BAgiOWh0dHBzOi8vd3d3LmFsbHRyYWlscy5jb20vbWVtYmVycy9rLWctMjQ2L3JlY29yZGluZ3M%3D--0bf23d88b9332490c888eed2a7c6ef18c16a2c7d; __utmc=119663758; __utma=119663758.2020533101.1597546364.1606532049.1606534362.44; __utmt=1; __utmb=119663758.4.10.1606534362; ab.storage.sessionId.add7d07a-2ace-44bb-86c9-0110078fbb04=%7B%22g%22%3A%224786e78b-b5e2-badf-5765-bb4a402073be%22%2C%22e%22%3A1606536281032%2C%22c%22%3A1606534366119%2C%22l%22%3A1606534481032%7D; _alltrails_session=BAh7DEkiD3Nlc3Npb25faWQGOgZFVEkiJWFhZWNjMTI3NDQ5ZmQzZWVkMDMyMzY2M2E5Y2QwNGFhBjsAVEkiE3VzZXJfcmV0dXJuX3RvBjsAVEkiIC9tZW1iZXJzL2stZy0yNDYvcmVjb3JkaW5ncwY7AFRJIgpmbGFzaAY7AFR7B0kiDGRpc2NhcmQGOwBUWwBJIgxmbGFzaGVzBjsAVHsGSSIMd2FybmluZwY7AEZJQzoeQWN0aXZlU3VwcG9ydDo6U2FmZUJ1ZmZlciIB2TxzcGFuIGRhdGEtY2xvc2VDb29raWU9ImF0X2ZsYXNoX3Nob3dfcHJvbW9fYmFubmVyIiBjbGFzcz0neGxhdGUtbm9uZSc%2BIEN5YmVyIFdlZWtlbmQgU2FsZSA1MCUgT2ZmIDxzcGFuIGNsYXNzPSJmbGFzaF91cmxfYnJlYWsiPjxici8%2BPC9zcGFuPjxhIGNsYXNzPSJmbGFzaF91cmwiIGhyZWY9Ii9wcm8vc2lnbnVwP2s9Y3liZXJzYWxlMjAiPkdldCBTdGFydGVkPC9hPjwvc3Bhbj4HOwBUOg9AaHRtbF9zYWZlVEkiEF9jc3JmX3Rva2VuBjsARkkiMStEcGo5eWN3dUMyMWMwY2pFc2oxZ1diZEpMeDRza3hNVElaMHk2MGQ1c0E9BjsARkkiGXdhcmRlbi51c2VyLnVzZXIua2V5BjsAVFsHWwZpBCf6jwEwSSIdd2FyZGVuLnVzZXIudXNlci5zZXNzaW9uBjsAVHsGSSIUbGFzdF9yZXF1ZXN0X2F0BjsAVGwrB4vFwV9JIg5yZXR1cm5fdG8GOwBGSSINL2V4cGxvcmUGOwBU--3ec7ac8eb1a31555d6cf09faaaad210fbb8d11cf' \
+  --compressed \
+  -o at-track-medium.json

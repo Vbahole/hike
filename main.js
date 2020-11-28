@@ -13,8 +13,8 @@ const dbTableName = 'hike';
 
 (async () => {
 
-  testIt();
-  return;
+  // testIt();
+  // return;
 
   await purgeItems(dbTableName, 'recording')
   await purgeItems(dbTableName, 'consolidate')
