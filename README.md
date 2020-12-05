@@ -1,6 +1,8 @@
-# hike
-
-an app to compile and store All Trails hike recordings and generate statistics.
+# hike (should have been named hike-import or hike-tools)  
+- converts alltrails json curl response to dynamo records
+- compiles stats and pushes those to dynamo  
+- currently runs standalone in node locally
+- could wind up in a lambda that fires on s3 uploads
 
 ## prereqs
 node, aws cli installed; aws cli configured for access to aws resources  
