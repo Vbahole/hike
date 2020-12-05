@@ -45,6 +45,24 @@ reduce function summarizes stats for a day by collapsing all hikes from any one 
 - put - send overal stat to dynamo
 
 ### DynamoDB -- hash 'h' string; range 'r' also string
+```
+{
+ "r": "2020-07-08T20:41:10Z",
+ "h": "at-map-medium",
+ "summaryStats": {
+  "duration": 73,
+  "timeTotal": 5521,
+  "elevationLoss": 11,
+  "speedAverage": 1.2393847209515096,
+  "elevationGain": 11,
+  "calories": 632,
+  "distanceTotal": 5418.59,
+  "timeMoving": 4372,
+  "updatedAt": "2020-07-08T22:14:29+00:00",
+  "paceAverage": 0.8068519670246318
+ }
+}
+```
 
   h=recording - range=iso datetime; includes points array, many hikes per 1 day, includes distance/duration/pace stats
 
