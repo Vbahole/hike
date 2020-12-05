@@ -3,7 +3,7 @@
 an app to compile and store All Trails hike recordings and generate statistics.
 
 ## prereqs
-- node, aws cli installed; aws cli configured for access to aws resources  
+node, aws cli installed; aws cli configured for access to aws resources  
 
 ## run
 
