@@ -44,7 +44,9 @@ reduce function summarizes stats for a day by collapsing all hikes from any one 
 - stats - build stats on either the raw daily gpx tracks or the consolidate
 - put - send overal stat to dynamo
 
-### DynamoDB -- hash 'h' string; range 'r' also string
+### DynamoDB -- hash named 'h' of type string; range named 'r' type string
+recording item
+h=at-map-medium - range=date; many hikes per 1 day:
 ```
 {
  "r": "2020-07-08T20:41:10Z",
@@ -63,12 +65,32 @@ reduce function summarizes stats for a day by collapsing all hikes from any one 
  }
 }
 ```
-
-  h=recording - range=iso datetime; includes points array, many hikes per 1 day, includes distance/duration/pace stats
-
-  h=consolidate - range=date only (06/20/2020), points array with all hikes for the day, stats per by day
-  h=stats - r=overall - calculated on the whole dataset (right now during import, but could be offline/periodic)
-
+stat item
+h=stats - r=overall - calculated on the whole dataset (right now during import, but could be offline/periodic):
+```
+{
+ "totalHikeCount": 135,
+ "r": "overall",
+ "AverageSpeedKilometersPerHour": 5.09,
+ "mostHikesInOneDay": {
+  "hikes": 4,
+  "dates": [
+   "10/15/2020"
+  ]
+ },
+ "h": "stat",
+ "totalDistanceKm": 581.08,
+ "mostKmsHikedInOneDay": {
+  "kms": 18.32563,
+  "date": [
+   "11/14/2020"
+  ]
+ },
+ "AveragePaceMinutesPerKilometer": 12.13,
+ "totalDurationHours": 113.3
+}
+```
+  
 ## stat ideas
 
 - weekly totals
