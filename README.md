@@ -14,7 +14,7 @@ node, aws cli installed; aws cli configured for access to aws resources
 - run it through JSONLint <https://jsonlint.com/> to clean it (optional)
 
 - `node (or nodemon) main.js`  
-should update the hike table in dynamo
+- should update the hike table in dynamo
 
 ## options
 - source to import from
@@ -22,8 +22,7 @@ should update the hike table in dynamo
 - compute overall stats
 - consolidate for daily stats
 
-
-## AllTrails recording exports in gpx formula
+## AllTrails recording exports in gpx formula (defecated)
 - uses gpxparser - <https://github.com/Luuka/GPXParser.js> to read gpx, get distance and time from start end points
 - cannot get moving time and have to export all recordings manually
 
@@ -35,15 +34,15 @@ pick and choose which fields from the raw response to push to dynamo
 After the import, code works the same for both
 
 ## Daily Consolidation - collapse by day
-a reduce function in stats takes care of this
+reduce function summarizes stats for a day by collapsing all hikes from any one day
 
 ## Main Steps
-- import - from at-map or directory of gpx AT file exports
-- transform:gpx - files need parser like gpxparser to get distance/time/pace
+- import - from at-map.json curl result
 - transform:at-map - filter fields before dynamo dump
 - consolidate - flatten multiple hikes in the same day to get compilation stats
-- put - send to dynamo
+- put - send raw to dynamo
 - stats - build stats on either the raw daily gpx tracks or the consolidate
+- put - send overal stat to dynamo
 
 ### DynamoDB -- hash 'h' string; range 'r' also string
 
