@@ -6,11 +6,15 @@ an app to compile and store All Trails hike recordings and generate statistics.
 node, aws cli installed; aws cli configured for access to aws resources  
 
 ## run
+- visit alltrails.com, login, go to recordings
+- in dev tools on the network tab look for the `maps?` xhr call
+- export the request as a curl command (see sample in this repo)
+- edit to get type=track and detail=medium
+- use that to replace stubs/at-track-medium.json in this project
+- run it through JSONLint <https://jsonlint.com/> to clean it (optional)
 
-replace stubs/at-track-medium.json with the latest All Trails map request capture. you can export the xhr request as a curl command using dev tools if you need to edit it. Make sure you get type=track and detail=medium. see the curl command in the repo to export to a file.  
-run it through JSONLint <https://jsonlint.com/> first to clean it up  
-then `nodemon main.js`  
-check the hike table in dynamo
+- `node (or nodemon) main.js`  
+should update the hike table in dynamo
 
 ## options
 - source to import from
